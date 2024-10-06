@@ -1,8 +1,16 @@
 import { useForm } from '@tanstack/react-form';
-import { useEstimationSessions } from '../lib/context/estimationSession';
-import { useUser } from '../lib/context/user';
+import { useEstimationSessions } from '../../lib/context/estimationSession';
+import { useUser } from '../../lib/context/user';
+import Input from '../Input';
+import Button from '../Button';
 
-const CreateEstimationSession = () => {
+interface CreateEstimationSessionFormProps {
+  onCreated: () => void;
+}
+
+const CreateEstimationSessionForm: React.FC<
+  CreateEstimationSessionFormProps
+> = ({ onCreated }) => {
   const user = useUser();
   const estimationSessions = useEstimationSessions();
   const form = useForm({
@@ -14,13 +22,17 @@ const CreateEstimationSession = () => {
         Name: value.name,
         UserId: user.current?.$id,
       });
+      onCreated();
     },
   });
 
   return (
     <>
-      <h1>Create Estimation Session</h1>
+      <h2 className="mb-4 text-xl font-bold">
+        Create a New Estimation Session
+      </h2>
       <form
+        className="space-y-6"
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -30,8 +42,8 @@ const CreateEstimationSession = () => {
         <form.Field
           name="name"
           children={(field) => (
-            <input
-              placeholder="Name"
+            <Input
+              label="Name"
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
@@ -39,10 +51,10 @@ const CreateEstimationSession = () => {
             />
           )}
         />
-        <button type="submit">Submit</button>
+        <Button type="submit">Create</Button>
       </form>
     </>
   );
 };
 
-export default CreateEstimationSession;
+export default CreateEstimationSessionForm;

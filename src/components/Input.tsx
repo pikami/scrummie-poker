@@ -8,7 +8,7 @@ const Input = ({
   label?: string;
 }) => {
   return (
-    <>
+    <div>
       {label && (
         <label className="block text-sm font-medium leading-6">{label}</label>
       )}
@@ -18,7 +18,7 @@ const Input = ({
           {...props}
         />
       </div>
-    </>
+    </div>
   );
 };
 

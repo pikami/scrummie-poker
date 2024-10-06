@@ -11,7 +11,6 @@ import Home from './pages/Home';
 import { UserProvider } from './lib/context/user';
 import Login from './pages/Login';
 import EstimationSession from './pages/EstimationSession';
-import CreateEstimationSession from './pages/CreateEstimationSession';
 import { EstimationSessionProvider } from './lib/context/estimationSession';
 
 const rootRoute = createRootRoute();
@@ -28,12 +27,6 @@ const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
 });
 
-const createEstimationSessionRoute = createRoute({
-  path: 'estimate/new',
-  component: CreateEstimationSession,
-  getParentRoute: () => rootRoute,
-});
-
 const estimationSessionRoute = createRoute({
   path: 'estimate/session/$sessionId',
   component: EstimationSession,
@@ -44,7 +37,6 @@ const router = createRouter({
   routeTree: rootRoute.addChildren([
     indexRoute,
     loginRoute,
-    createEstimationSessionRoute,
     estimationSessionRoute,
   ]),
 });

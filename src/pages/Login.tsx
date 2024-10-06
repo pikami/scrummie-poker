@@ -25,41 +25,37 @@ const Login = () => {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6">
-            <div>
-              <form.Field
-                name="email"
-                children={(field) => (
-                  <Input
-                    label="Email address"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                )}
-              />
-            </div>
+            <form.Field
+              name="email"
+              children={(field) => (
+                <Input
+                  label="Email address"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+              )}
+            />
 
-            <div>
-              <form.Field
-                name="password"
-                children={(field) => (
-                  <Input
-                    label="Password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                )}
-              />
-            </div>
+            <form.Field
+              name="password"
+              children={(field) => (
+                <Input
+                  label="Password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                />
+              )}
+            />
 
             <div>
               <div className="flex items-center justify-between gap-4">
