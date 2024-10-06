@@ -1,12 +1,16 @@
 import reactLogo from '../assets/react.svg';
 import viteLogo from '/vite.svg';
 import './Home.css';
-import { Link } from '@tanstack/react-router';
+import { getRouteApi, Link } from '@tanstack/react-router';
 import { useUser } from '../lib/context/user';
 import { useEstimationSessions } from '../lib/context/estimationSession';
+import { Card, GridList } from '../components';
+
+const route = getRouteApi('/');
 
 function Home() {
   const user = useUser();
+  const navigate = route.useNavigate();
   const estimationSessions = useEstimationSessions();
 
   return (
@@ -33,11 +37,28 @@ function Home() {
 
       <div>
         <p>Estimation sessions</p>
-        {estimationSessions?.current.map((session) => (
-          <Link key={session.$id} to={`/estimate/session/${session.$id}`}>
-            {session.Name}
-          </Link>
-        ))}
+        <GridList
+          colNum={2}
+          items={estimationSessions?.current ?? []}
+          itemComponent={({ item }) => (
+            <Card
+              key={item.$id}
+              title={item.Name}
+              description={item.$id}
+              onClick={() => {
+                navigate({
+                  to: '/estimate/session/$sessionId',
+                  params: { sessionId: item.$id },
+                });
+              }}
+            />
+          )}
+          onAddItem={() =>
+            navigate({
+              to: '/estimate/new',
+            })
+          }
+        />
       </div>
     </>
   );
