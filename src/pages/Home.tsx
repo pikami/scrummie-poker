@@ -19,7 +19,7 @@ function Home() {
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Scrummie-Poker</h1>
+      <h1 className="text-3xl font-bold underline">Scrummie-Poker</h1>
 
       <ul>
         <li>
