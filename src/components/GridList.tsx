@@ -1,7 +1,7 @@
 interface GridListProps<T> {
   items: T[];
   colNum: number;
-  onAddItem: () => void;
+  onAddItem?: () => void;
   itemComponent: React.ComponentType<{ item: T }>;
 }
 

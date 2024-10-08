@@ -10,8 +10,9 @@ import {
 import Home from './pages/Home';
 import { UserProvider } from './lib/context/user';
 import Login from './pages/Login';
-import EstimationSession from './pages/EstimationSession';
 import { EstimationSessionProvider } from './lib/context/estimationSession';
+import { EstimationContextProvider } from './lib/context/estimation';
+import Estimation from './pages/Estimation/Estimation';
 
 const rootRoute = createRootRoute();
 
@@ -29,7 +30,7 @@ const loginRoute = createRoute({
 
 const estimationSessionRoute = createRoute({
   path: 'estimate/session/$sessionId',
-  component: EstimationSession,
+  component: Estimation,
   getParentRoute: () => rootRoute,
 });
 
@@ -49,11 +50,13 @@ declare module '@tanstack/react-router' {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <EstimationSessionProvider>
-      {/* TODO: Move ctx providers to layout */}
-      <UserProvider>
-        <RouterProvider router={router} />
-      </UserProvider>
-    </EstimationSessionProvider>
+    <UserProvider>
+      <EstimationSessionProvider>
+        <EstimationContextProvider>
+          {/* TODO: Move ctx providers to layout */}
+          <RouterProvider router={router} />
+        </EstimationContextProvider>
+      </EstimationSessionProvider>
+    </UserProvider>
   </StrictMode>,
 );

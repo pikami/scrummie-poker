@@ -11,7 +11,6 @@ const Card: React.FC<CardProps> = ({ title, description, onClick }) => {
     'p-4 border rounded-lg shadow-sm transition',
     {
       'hover:bg-gray-100 dark:hover:bg-nero-800 cursor-pointer': onClick,
-      'cursor-default': !onClick,
     },
     'border-gray-300 dark:border-nero-700',
     'bg-white dark:bg-nero-900',

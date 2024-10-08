@@ -13,23 +13,23 @@ import {
 } from '../../constants';
 
 interface EstimationSessionType extends Models.Document {
-  UserId: string;
-  Name: string;
-  Tickets: string[];
-  SessionState: string;
+  userId: string;
+  name: string;
+  tickets: string[];
+  sessionState: string;
 }
 
 interface EstimationSessionTicket {
-  Id: string;
-  Name: string;
+  id: string;
+  name: string;
 }
 
 interface SessionStateType {
-  CurrentTicketId: string;
-  VotesRevealed: boolean;
-  Votes: {
-    UserId: string;
-    Estimate: number;
+  currentTicketId: string;
+  votesRevealed: boolean;
+  votes: {
+    userId: string;
+    estimate: number;
   }[];
 }
 
@@ -41,7 +41,7 @@ interface EstimationSessionsContextType {
   remove: (id: string) => Promise<void>;
   addTicket: (
     sessionId: string,
-    ticket: Omit<EstimationSessionTicket, 'Id'>,
+    ticket: Omit<EstimationSessionTicket, 'id'>,
   ) => Promise<void>;
   getTickets: (sessionId: string) => EstimationSessionTicket[];
   selectTicket: (sessionId: string, ticketId: string) => Promise<void>;
@@ -98,7 +98,7 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
 
   const addTicket = async (
     sessionId: string,
-    ticket: Omit<EstimationSessionTicket, 'Id'>,
+    ticket: Omit<EstimationSessionTicket, 'id'>,
   ) => {
     const currentSession = estimationSessions.find((x) => x.$id === sessionId);
     const response = await databases.updateDocument<EstimationSessionType>(
@@ -106,10 +106,10 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
       APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
-        Tickets: currentSession?.Tickets.concat([
+        tickets: currentSession?.tickets.concat([
           JSON.stringify({
             ...ticket,
-            Id: crypto.randomUUID(),
+            id: crypto.randomUUID(),
           }),
         ]),
       },
@@ -126,7 +126,7 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
     return (
       estimationSessions
         .find((x) => x.$id === sessionId)
-        ?.Tickets.map<EstimationSessionTicket>((x) => JSON.parse(x)) ?? []
+        ?.tickets.map<EstimationSessionTicket>((x) => JSON.parse(x)) ?? []
     );
   };
 
@@ -136,8 +136,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
       APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
-        SessionState: JSON.stringify({
-          CurrentTicketId: ticketId,
+        sessionState: JSON.stringify({
+          currentTicketId: ticketId,
         }),
       },
     );
@@ -151,7 +151,7 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
 
   const getState = (sessionId: string): SessionStateType => {
     return JSON.parse(
-      estimationSessions.find((x) => x.$id === sessionId)?.SessionState ?? '{}',
+      estimationSessions.find((x) => x.$id === sessionId)?.sessionState ?? '{}',
     );
   };
 
@@ -162,12 +162,12 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
     userId: string,
   ) => {
     const currentState = getState(sessionId);
-    const newVotes = (currentState.Votes ?? [])
-      .filter((x) => x.UserId !== userId)
+    const newVotes = (currentState.votes ?? [])
+      .filter((x) => x.userId !== userId)
       .concat([
         {
-          Estimate: estimate,
-          UserId: userId,
+          estimate: estimate,
+          userId: userId,
         },
       ]);
     const response = await databases.updateDocument<EstimationSessionType>(
@@ -175,9 +175,9 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
       APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
-        SessionState: JSON.stringify({
-          CurrentTicketId: ticketId,
-          Votes: newVotes,
+        sessionState: JSON.stringify({
+          currentTicketId: ticketId,
+          votes: newVotes,
         }),
       },
     );
@@ -196,7 +196,7 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
       APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
-        SessionState: JSON.stringify({
+        sessionState: JSON.stringify({
           ...currentState,
           VotesRevealed: true,
         }),
@@ -217,8 +217,12 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
       [Query.orderDesc('$createdAt'), Query.limit(10)],
     );
     setEstimationSessions(response.documents);
+  };
 
-    client.subscribe<EstimationSessionType>(
+  useEffect(() => {
+    init();
+
+    return client.subscribe<EstimationSessionType>(
       [
         `databases.${APPWRITE_DATABASE_ID}.collections.${APPWRITE_ESTIMATION_SESSION_COLLECTION_ID}.documents`,
       ],
@@ -231,10 +235,6 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
         );
       },
     );
-  };
-
-  useEffect(() => {
-    init();
   }, []);
 
   return (

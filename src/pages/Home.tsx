@@ -47,7 +47,7 @@ function Home() {
           itemComponent={({ item }) => (
             <Card
               key={item.$id}
-              title={item.Name}
+              title={item.name}
               description={item.$id}
               onClick={() => {
                 navigate({

@@ -32,7 +32,7 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, children }) => {
 
       <div
         className={classNames(
-          'dark:bg-nero-900 relative h-full w-80 transform space-y-6 bg-white p-6 shadow-lg transition-transform',
+          'relative h-full w-80 transform space-y-6 bg-white p-6 shadow-lg transition-transform dark:bg-nero-900',
           {
             'translate-x-0': isOpen,
             'translate-x-full': !isOpen,
@@ -41,7 +41,7 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, children }) => {
       >
         {children}
 
-        <Button onClick={onClose} color={ButtonColor.Secondary}>
+        <Button onClick={onClose} color={ButtonColor.Secondary} fullWidth>
           Cancel
         </Button>
       </div>

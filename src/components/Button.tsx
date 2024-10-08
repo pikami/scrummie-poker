@@ -9,15 +9,17 @@ enum ButtonColor {
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: ButtonColor;
+  fullWidth?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
   children,
   color = ButtonColor.Primary,
+  fullWidth = false,
   ...props
 }) => {
   const buttonClass = classNames(
-    'flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+    'flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
     {
       'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600':
         color === ButtonColor.Primary,
@@ -27,6 +29,7 @@ const Button: React.FC<ButtonProps> = ({
         color === ButtonColor.Error,
       'bg-green-600 hover:bg-green-500 focus-visible:outline-green-600':
         color === ButtonColor.Success,
+      'w-full': fullWidth,
     },
   );
 

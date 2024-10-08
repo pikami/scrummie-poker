@@ -1,36 +1,24 @@
 import { useForm } from '@tanstack/react-form';
-import { useEstimationSessions } from '../../lib/context/estimationSession';
-import { useUser } from '../../lib/context/user';
-import Input from '../Input';
-import Button from '../Button';
+import { Button, Input } from '../../../components';
+import { EstimationSessionTicket } from '../../../lib/types/entityModels';
 
-interface CreateEstimationSessionFormProps {
-  onCreated: () => void;
+interface CreateTicketFormProps {
+  onCreate: (ticket: Omit<EstimationSessionTicket, 'id'>) => Promise<void>;
 }
 
-const CreateEstimationSessionForm: React.FC<
-  CreateEstimationSessionFormProps
-> = ({ onCreated }) => {
-  const user = useUser();
-  const estimationSessions = useEstimationSessions();
+const CreateTicketForm: React.FC<CreateTicketFormProps> = ({ onCreate }) => {
   const form = useForm({
     defaultValues: {
       name: '',
     },
     onSubmit: async ({ value }) => {
-      await estimationSessions?.add({
-        name: value.name,
-        userId: user.current?.$id,
-      });
-      onCreated();
+      await onCreate(value);
     },
   });
 
   return (
-    <>
-      <h2 className="mb-4 text-xl font-bold">
-        Create a New Estimation Session
-      </h2>
+    <div>
+      <h2 className="mb-4 text-xl font-bold">Create a New Ticket</h2>
       <form
         className="space-y-6"
         onSubmit={(e) => {
@@ -44,6 +32,7 @@ const CreateEstimationSessionForm: React.FC<
           children={(field) => (
             <Input
               label="Name"
+              required
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
@@ -55,8 +44,8 @@ const CreateEstimationSessionForm: React.FC<
           Create
         </Button>
       </form>
-    </>
+    </div>
   );
 };
 
-export default CreateEstimationSessionForm;
+export default CreateTicketForm;
