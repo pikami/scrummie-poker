@@ -2,24 +2,48 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import {
-  createRootRoute,
+  createRootRouteWithContext,
   createRoute,
   createRouter,
+  Outlet,
+  redirect,
   RouterProvider,
 } from '@tanstack/react-router';
 import Home from './pages/Home';
-import { UserProvider } from './lib/context/user';
+import { UserContextType, UserProvider, useUser } from './lib/context/user';
 import Login from './pages/Login';
 import { EstimationSessionProvider } from './lib/context/estimationSession';
 import { EstimationContextProvider } from './lib/context/estimation';
 import Estimation from './pages/Estimation/Estimation';
 
-const rootRoute = createRootRoute();
+interface RouterContext {
+  userContext: UserContextType;
+}
+
+const rootRoute = createRootRouteWithContext<RouterContext>()({
+  component: () => <Outlet />,
+});
+
+const authenticatedRoute = createRoute({
+  id: '_authenticated',
+  getParentRoute: () => rootRoute,
+  beforeLoad: async ({ location, context }) => {
+    console.log(context);
+    if (!context.userContext.current) {
+      throw redirect({
+        to: '/login',
+        search: {
+          redirect: location.href,
+        },
+      });
+    }
+  },
+});
 
 const indexRoute = createRoute({
   path: '/',
   component: Home,
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => authenticatedRoute,
 });
 
 const loginRoute = createRoute({
@@ -31,15 +55,17 @@ const loginRoute = createRoute({
 const estimationSessionRoute = createRoute({
   path: 'estimate/session/$sessionId',
   component: Estimation,
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => authenticatedRoute,
 });
 
 const router = createRouter({
   routeTree: rootRoute.addChildren([
-    indexRoute,
+    authenticatedRoute.addChildren([indexRoute, estimationSessionRoute]),
     loginRoute,
-    estimationSessionRoute,
   ]),
+  context: {
+    userContext: undefined!,
+  },
 });
 
 declare module '@tanstack/react-router' {
@@ -48,13 +74,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+const InnerApp = () => {
+  const userContext = useUser();
+
+  return userContext.isLoading ? (
+    <p>Loading...</p>
+  ) : (
+    <RouterProvider router={router} context={{ userContext }} />
+  );
+};
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <UserProvider>
       <EstimationSessionProvider>
         <EstimationContextProvider>
           {/* TODO: Move ctx providers to layout */}
-          <RouterProvider router={router} />
+          <InnerApp />
         </EstimationContextProvider>
       </EstimationSessionProvider>
     </UserProvider>

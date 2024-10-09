@@ -9,7 +9,7 @@ import CreateTicketForm from './components/CreateTicketForm';
 
 const fibonacciSequence = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 100];
 
-const route = getRouteApi('/estimate/session/$sessionId');
+const route = getRouteApi('/_authenticated/estimate/session/$sessionId');
 
 const Estimation: React.FC = () => {
   const { sessionId } = route.useParams();

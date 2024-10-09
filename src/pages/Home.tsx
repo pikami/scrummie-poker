@@ -12,7 +12,7 @@ import {
 } from '../components';
 import { useState } from 'react';
 
-const route = getRouteApi('/');
+const route = getRouteApi('/_authenticated/');
 
 function Home() {
   const user = useUser();

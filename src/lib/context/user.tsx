@@ -8,8 +8,9 @@ import {
 } from 'react';
 import { account } from '../appwrite';
 
-interface UserContextType {
+export interface UserContextType {
   current: Models.Session | Models.User<Models.Preferences> | null;
+  isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
@@ -30,11 +31,15 @@ export const UserProvider = (props: PropsWithChildren) => {
   const [user, setUser] = useState<
     Models.Session | Models.User<Models.Preferences> | null
   >(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const login = async (email: string, password: string) => {
     const loggedIn = await account.createEmailPasswordSession(email, password);
     setUser(loggedIn);
-    window.location.replace('/'); // you can use different redirect method for your application
+
+    const params = new URLSearchParams(window.location.search);
+    const redirectPath = params.get('redirect');
+    window.location.replace(redirectPath || '/');
   };
 
   const logout = async () => {
@@ -50,7 +55,10 @@ export const UserProvider = (props: PropsWithChildren) => {
   const loginAsGuest = async () => {
     const session = await account.createAnonymousSession();
     setUser(session);
-    window.location.replace('/'); // you can use different redirect method for your application
+
+    const params = new URLSearchParams(window.location.search);
+    const redirectPath = params.get('redirect');
+    window.location.replace(redirectPath || '/');
   };
 
   const init = async () => {
@@ -59,6 +67,8 @@ export const UserProvider = (props: PropsWithChildren) => {
       setUser(loggedIn);
     } catch (err) {
       setUser(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -68,7 +78,14 @@ export const UserProvider = (props: PropsWithChildren) => {
 
   return (
     <UserContext.Provider
-      value={{ current: user, login, logout, register, loginAsGuest }}
+      value={{
+        current: user,
+        isLoading,
+        login,
+        logout,
+        register,
+        loginAsGuest,
+      }}
     >
       {props.children}
     </UserContext.Provider>
