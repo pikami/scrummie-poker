@@ -40,7 +40,7 @@ const Estimation: React.FC = () => {
   return (
     <div className="flex h-screen">
       <TaskSidebar
-        className="dark:bg-customGray-800 w-64 overflow-y-scroll bg-gray-50 p-4 dark:bg-nero-700"
+        className="w-64 overflow-y-scroll bg-gray-50 p-4 dark:bg-nero-800"
         tickets={tickets}
         onSelectTicket={(ticket) => setActiveTicket(ticket.id)}
         onAddTicket={() => setDrawerOpen(true)}

@@ -45,6 +45,7 @@ export const UserProvider = (props: PropsWithChildren) => {
   const logout = async () => {
     await account.deleteSession('current');
     setUser(null);
+    window.location.replace('/');
   };
 
   const register = async (email: string, password: string) => {

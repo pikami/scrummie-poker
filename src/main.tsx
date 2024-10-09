@@ -15,6 +15,7 @@ import Login from './pages/Login';
 import { EstimationSessionProvider } from './lib/context/estimationSession';
 import { EstimationContextProvider } from './lib/context/estimation';
 import Estimation from './pages/Estimation/Estimation';
+import Header from './components/Header';
 
 interface RouterContext {
   userContext: UserContextType;
@@ -37,6 +38,14 @@ const authenticatedRoute = createRoute({
         },
       });
     }
+  },
+  component: () => {
+    return (
+      <>
+        <Header />
+        <Outlet />
+      </>
+    );
   },
 });
 
