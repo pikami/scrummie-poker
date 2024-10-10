@@ -5,12 +5,13 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { client, databases } from '../appwrite';
-import { DatabaseModels, EntityModels } from '../types';
 import {
-  APPWRITE_DATABASE_ID,
-  APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
-} from '../../constants';
+  client,
+  DATABASE_ID,
+  databases,
+  ESTIMATION_SESSION_COLLECTION_ID,
+} from '../appwrite';
+import { DatabaseModels, EntityModels } from '../types';
 import { useUser } from './user';
 import { EstimationSessionTicket } from '../types/entityModels';
 
@@ -78,8 +79,8 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
 
     databases
       .getDocument<DatabaseModels.EstimationSession>(
-        APPWRITE_DATABASE_ID,
-        APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+        DATABASE_ID,
+        ESTIMATION_SESSION_COLLECTION_ID,
         sessionId,
       )
       .then((payload) => {
@@ -89,7 +90,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
 
     return client.subscribe<DatabaseModels.EstimationSession>(
       [
-        `databases.${APPWRITE_DATABASE_ID}.collections.${APPWRITE_ESTIMATION_SESSION_COLLECTION_ID}.documents.${sessionId}`,
+        `databases.${DATABASE_ID}.collections.${ESTIMATION_SESSION_COLLECTION_ID}.documents.${sessionId}`,
       ],
       ({ payload }) => {
         const userId = userData?.$id ?? ''; // TODO: Not sure if this is the user id or session
@@ -108,8 +109,8 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
     data: Partial<EntityModels.SessionState>,
   ) => {
     await databases.updateDocument<DatabaseModels.EstimationSession>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
         sessionState: JSON.stringify({
@@ -159,8 +160,8 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
       .map((x) => JSON.stringify(x));
 
     await databases.updateDocument<DatabaseModels.EstimationSession>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
         tickets: newTicketsValue,

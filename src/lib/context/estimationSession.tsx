@@ -5,12 +5,13 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { client, databases } from '../appwrite';
-import { ID, Models, Query } from 'appwrite';
 import {
-  APPWRITE_DATABASE_ID,
-  APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
-} from '../../constants';
+  client,
+  DATABASE_ID,
+  databases,
+  ESTIMATION_SESSION_COLLECTION_ID,
+} from '../appwrite';
+import { ID, Models, Query } from 'appwrite';
 
 interface EstimationSessionType extends Models.Document {
   userId: string;
@@ -72,8 +73,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
     estimationSession: Omit<EstimationSessionType, keyof Models.Document>,
   ) => {
     const response = await databases.createDocument<EstimationSessionType>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       ID.unique(),
       estimationSession,
     );
@@ -84,8 +85,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
 
   const remove = async (id: string) => {
     await databases.deleteDocument(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       id,
     );
     setEstimationSessions((estimationSessions) =>
@@ -102,8 +103,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
   ) => {
     const currentSession = estimationSessions.find((x) => x.$id === sessionId);
     const response = await databases.updateDocument<EstimationSessionType>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
         tickets: currentSession?.tickets.concat([
@@ -132,8 +133,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
 
   const selectTicket = async (sessionId: string, ticketId: string) => {
     const response = await databases.updateDocument<EstimationSessionType>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
         sessionState: JSON.stringify({
@@ -171,8 +172,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
         },
       ]);
     const response = await databases.updateDocument<EstimationSessionType>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
         sessionState: JSON.stringify({
@@ -192,8 +193,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
   const revealVotes = async (sessionId: string) => {
     const currentState = getState(sessionId);
     const response = await databases.updateDocument<EstimationSessionType>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       sessionId,
       {
         sessionState: JSON.stringify({
@@ -212,8 +213,8 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
 
   const init = async () => {
     const response = await databases.listDocuments<EstimationSessionType>(
-      APPWRITE_DATABASE_ID,
-      APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
       [Query.orderDesc('$createdAt'), Query.limit(10)],
     );
     setEstimationSessions(response.documents);
@@ -224,7 +225,7 @@ export function EstimationSessionProvider(props: PropsWithChildren) {
 
     return client.subscribe<EstimationSessionType>(
       [
-        `databases.${APPWRITE_DATABASE_ID}.collections.${APPWRITE_ESTIMATION_SESSION_COLLECTION_ID}.documents`,
+        `databases.${DATABASE_ID}.collections.${ESTIMATION_SESSION_COLLECTION_ID}.documents`,
       ],
       (payload) => {
         setEstimationSessions((estimationSessions) =>
