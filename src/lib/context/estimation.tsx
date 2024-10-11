@@ -36,13 +36,17 @@ const mapEstimationSession = (
   data: DatabaseModels.EstimationSession,
   { userId }: { userId?: string },
 ) => {
-  const sessionState = JSON.parse(
-    data.sessionState,
-  ) as EntityModels.SessionState;
+  const sessionState: EntityModels.SessionState = data.sessionState
+    ? JSON.parse(data.sessionState)
+    : {
+        votes: [],
+      };
 
-  const tickets = data.tickets.map<EntityModels.EstimationSessionTicket>(
-    (ticket) => JSON.parse(ticket),
-  );
+  const tickets = data.tickets
+    ? data.tickets.map<EntityModels.EstimationSessionTicket>((ticket) =>
+        JSON.parse(ticket),
+      )
+    : [];
 
   const result: EntityModels.EstimationSession = {
     id: data.$id,
