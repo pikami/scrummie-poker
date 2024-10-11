@@ -5,6 +5,7 @@ interface ImportMetaEnv {
   readonly VITE_APPWRITE_PROJECT_ID: string;
   readonly VITE_APPWRITE_DATABASE_ID: string;
   readonly VITE_APPWRITE_ESTIMATION_SESSION_COLLECTION_ID: string;
+  readonly VITE_SESSION_INVITE_FUNCTION_ID: string;
 }
 
 interface ImportMeta {

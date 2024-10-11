@@ -1,0 +1,109 @@
+{
+  "projectId": "scrummie-poker",
+  "projectName": "ScrummiePoker",
+  "settings": {
+    "services": {
+      "account": true,
+      "avatars": true,
+      "databases": true,
+      "locale": true,
+      "health": true,
+      "storage": true,
+      "teams": true,
+      "users": true,
+      "functions": true,
+      "graphql": true,
+      "messaging": true
+    },
+    "auth": {
+      "methods": {
+        "jwt": true,
+        "phone": true,
+        "invites": true,
+        "anonymous": true,
+        "email-otp": true,
+        "magic-url": true,
+        "email-password": true
+      },
+      "security": {
+        "duration": 31536000,
+        "limit": 0,
+        "sessionsLimit": 10,
+        "passwordHistory": 0,
+        "passwordDictionary": false,
+        "personalDataCheck": false,
+        "sessionAlerts": false,
+        "mockNumbers": []
+      }
+    }
+  },
+  "functions": [
+    {
+      "$id": "6708356a001290606744",
+      "execute": ["users"],
+      "name": "EstimationSessionInvite",
+      "enabled": true,
+      "logging": true,
+      "runtime": "bun-1.0",
+      "scopes": ["users.read", "documents.read", "documents.write"],
+      "events": [],
+      "schedule": "",
+      "timeout": 15,
+      "entrypoint": "src/main.ts",
+      "commands": "bun install",
+      "path": "functions/EstimationSessionInvite"
+    }
+  ],
+  "databases": [
+    {
+      "$id": "670402eb000f5aff721f",
+      "name": "estimations",
+      "enabled": true
+    }
+  ],
+  "collections": [
+    {
+      "$id": "670402f60023cb78d441",
+      "$permissions": ["create(\"users\")"],
+      "databaseId": "670402eb000f5aff721f",
+      "name": "sessions",
+      "enabled": true,
+      "documentSecurity": true,
+      "attributes": [
+        {
+          "key": "userId",
+          "type": "string",
+          "required": true,
+          "array": false,
+          "size": 50,
+          "default": null
+        },
+        {
+          "key": "name",
+          "type": "string",
+          "required": true,
+          "array": false,
+          "size": 200,
+          "default": null
+        },
+        {
+          "key": "tickets",
+          "type": "string",
+          "required": false,
+          "array": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "sessionState",
+          "type": "string",
+          "required": false,
+          "array": false,
+          "size": 1000,
+          "default": null
+        }
+      ],
+      "indexes": []
+    }
+  ]
+}

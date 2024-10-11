@@ -1,0 +1,18 @@
+{
+  "name": "estimation-session-invite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "node-appwrite": "^14.1.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.11",
+    "bun-types": "^1.1.30",
+    "prettier": "^3.3.3"
+  }
+}

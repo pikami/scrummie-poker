@@ -17,6 +17,7 @@ import { EstimationContextProvider } from './lib/context/estimation';
 import Estimation from './pages/Estimation/Estimation';
 import Header from './components/Header';
 import Profile from './pages/Profile';
+import Join from './pages/Join';
 
 interface RouterContext {
   userContext: UserContextType;
@@ -68,6 +69,12 @@ const profileRoute = createRoute({
   getParentRoute: () => authenticatedRoute,
 });
 
+const joinRoute = createRoute({
+  path: 'join/$sessionId',
+  component: Join,
+  getParentRoute: () => authenticatedRoute,
+});
+
 const estimationSessionRoute = createRoute({
   path: 'estimate/session/$sessionId',
   component: Estimation,
@@ -77,6 +84,7 @@ const estimationSessionRoute = createRoute({
 const router = createRouter({
   routeTree: rootRoute.addChildren([
     authenticatedRoute.addChildren([
+      joinRoute,
       indexRoute,
       profileRoute,
       estimationSessionRoute,
