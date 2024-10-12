@@ -6,6 +6,7 @@ import VoteSelection from './components/VoteSelection';
 import VoteList from './components/VoteList';
 import { Button, ButtonColor, Drawer } from '../../components';
 import CreateTicketForm from './components/CreateTicketForm';
+import CopyInput from '../../components/CopyInput';
 
 const fibonacciSequence = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 100];
 
@@ -47,6 +48,12 @@ const Estimation: React.FC = () => {
       />
 
       <div className="flex w-full flex-grow flex-col p-6">
+        <div className="flex items-center justify-center gap-2">
+          <span className="align-middle text-xl font-semibold">
+            Invite others to join your session
+          </span>
+          <CopyInput value={`${window.location.origin}/join/${sessionId}`} />
+        </div>
         {currentTicket ? (
           <>
             <h1 className="mb-4 text-2xl font-bold">{currentTicket.name}</h1>
