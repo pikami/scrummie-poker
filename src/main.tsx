@@ -12,7 +12,7 @@ import {
 import Home from './pages/Home';
 import { UserContextType, UserProvider, useUser } from './lib/context/user';
 import Login from './pages/Login';
-import { EstimationSessionProvider } from './lib/context/estimationSession';
+import { EstimationsListContextProvider } from './lib/context/estimationsList';
 import { EstimationContextProvider } from './lib/context/estimation';
 import Estimation from './pages/Estimation/Estimation';
 import Header from './components/Header';
@@ -115,12 +115,12 @@ const InnerApp = () => {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <UserProvider>
-      <EstimationSessionProvider>
+      <EstimationsListContextProvider>
         <EstimationContextProvider>
           {/* TODO: Move ctx providers to layout */}
           <InnerApp />
         </EstimationContextProvider>
-      </EstimationSessionProvider>
+      </EstimationsListContextProvider>
     </UserProvider>
   </StrictMode>,
 );

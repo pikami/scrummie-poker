@@ -14,6 +14,7 @@ import {
 import { DatabaseModels, EntityModels } from '../types';
 import { useUser } from './user';
 import { EstimationSessionTicket } from '../types/entityModels';
+import { mapDatabaseToEntity } from '../mappers/estimationSession';
 
 interface EstimationContextType {
   setSessionId: (sessionId: string) => void;
@@ -30,43 +31,6 @@ const EstimationContext = createContext<EstimationContextType | undefined>(
 
 export const useEstimationContext = () => {
   return useContext(EstimationContext);
-};
-
-const mapEstimationSession = (
-  data: DatabaseModels.EstimationSession,
-  { userId }: { userId?: string },
-) => {
-  const sessionState: EntityModels.SessionState = data.sessionState
-    ? JSON.parse(data.sessionState)
-    : {
-        votes: [],
-      };
-
-  const tickets = data.tickets
-    ? data.tickets.map<EntityModels.EstimationSessionTicket>((ticket) =>
-        JSON.parse(ticket),
-      )
-    : [];
-
-  const result: EntityModels.EstimationSession = {
-    id: data.$id,
-    name: data.name,
-    userId: data.userId,
-    tickets,
-    sessionState: {
-      ...sessionState,
-      currentPlayerVote: sessionState.votes.find((x) => x.userId === userId)
-        ?.estimate,
-      currentTicket: tickets.find((x) => x.id === sessionState.currentTicketId),
-    },
-  };
-
-  console.log({
-    result,
-    userId,
-  });
-
-  return result;
 };
 
 export const EstimationContextProvider = (props: PropsWithChildren) => {
@@ -89,7 +53,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
       )
       .then((payload) => {
         const userId = userData?.$id ?? ''; // TODO: Not sure if this is the user id or session
-        setCurrentSessionData(mapEstimationSession(payload, { userId }));
+        setCurrentSessionData(mapDatabaseToEntity(payload, { userId }));
       });
 
     return client.subscribe<DatabaseModels.EstimationSession>(
@@ -98,7 +62,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
       ],
       ({ payload }) => {
         const userId = userData?.$id ?? ''; // TODO: Not sure if this is the user id or session
-        setCurrentSessionData(mapEstimationSession(payload, { userId }));
+        setCurrentSessionData(mapDatabaseToEntity(payload, { userId }));
       },
     );
   }, [sessionId, userData]);

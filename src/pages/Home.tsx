@@ -1,7 +1,7 @@
 import './Home.css';
 import { getRouteApi, Link } from '@tanstack/react-router';
 import { useUser } from '../lib/context/user';
-import { useEstimationSessions } from '../lib/context/estimationSession';
+import { useEstimationsList } from '../lib/context/estimationsList';
 import {
   Card,
   CreateEstimationSessionForm,
@@ -15,7 +15,7 @@ const route = getRouteApi('/_authenticated/');
 function Home() {
   const user = useUser();
   const navigate = route.useNavigate();
-  const estimationSessions = useEstimationSessions();
+  const estimationsList = useEstimationsList();
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -33,16 +33,16 @@ function Home() {
         <p>Estimation sessions</p>
         <GridList
           colNum={2}
-          items={estimationSessions?.current ?? []}
+          items={estimationsList?.current ?? []}
           itemComponent={({ item }) => (
             <Card
-              key={item.$id}
+              key={item.id}
               title={item.name}
-              description={item.$id}
+              description={item.id}
               onClick={() => {
                 navigate({
                   to: '/estimate/session/$sessionId',
-                  params: { sessionId: item.$id },
+                  params: { sessionId: item.id },
                 });
               }}
             />
