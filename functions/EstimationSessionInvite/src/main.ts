@@ -1,4 +1,4 @@
-import { Client, Databases } from 'node-appwrite';
+import { Client, Databases, Models, Users } from 'node-appwrite';
 import { AppwriteRuntimeContext, AppwriteSendReturn } from './definitions.mjs';
 
 const joinSession = async ({
@@ -13,6 +13,7 @@ const joinSession = async ({
   ctx: AppwriteRuntimeContext;
 }): Promise<AppwriteSendReturn> => {
   const databases = new Databases(client);
+  const users = new Users(client);
 
   let estimation;
   try {
@@ -31,16 +32,43 @@ const joinSession = async ({
     );
   }
 
+  let user: Models.User<Models.Preferences>;
+  try {
+    user = await users.get(userId);
+  } catch (e) {
+    error({ e });
+    return res.json(
+      {
+        message: 'Failed to get user',
+      },
+      500,
+    );
+  }
+
   try {
     const permissions: string[] = estimation['$permissions'];
     permissions.push(`read("user:${userId}")`);
     permissions.push(`update("user:${userId}")`);
 
+    const playerIds: string[] = estimation['playerIds'];
+    playerIds.push(userId);
+
+    const players: string[] = estimation['players'];
+    players.push(
+      JSON.stringify({
+        userId,
+        name: user.name.length > 0 ? user.name : `Guest - ${userId}`,
+      }),
+    );
+
     await databases.updateDocument(
       Bun.env.APPWRITE_DATABASE_ID,
       Bun.env.APPWRITE_ESTIMATION_SESSION_COLLECTION_ID,
       estimationId,
-      {},
+      {
+        playerIds,
+        players,
+      },
       permissions,
     );
 

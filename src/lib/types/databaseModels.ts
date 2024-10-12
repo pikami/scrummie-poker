@@ -5,6 +5,8 @@ interface EstimationSession extends Models.Document {
   name: string;
   tickets: string[];
   sessionState: string;
+  players: string[];
+  playerIds: string[];
 }
 
 export type { EstimationSession };

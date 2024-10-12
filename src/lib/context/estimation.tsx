@@ -52,7 +52,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
         sessionId,
       )
       .then((payload) => {
-        const userId = userData?.$id ?? ''; // TODO: Not sure if this is the user id or session
+        const userId = userData?.$id ?? '';
         setCurrentSessionData(mapDatabaseToEntity(payload, { userId }));
       });
 
@@ -61,7 +61,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
         `databases.${DATABASE_ID}.collections.${ESTIMATION_SESSION_COLLECTION_ID}.documents.${sessionId}`,
       ],
       ({ payload }) => {
-        const userId = userData?.$id ?? ''; // TODO: Not sure if this is the user id or session
+        const userId = userData?.$id ?? '';
         setCurrentSessionData(mapDatabaseToEntity(payload, { userId }));
       },
     );
@@ -98,7 +98,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
   };
 
   const setVote = async (estimate: string) => {
-    const userId = userData?.$id ?? ''; // TODO: Not sure if this is the user id or session
+    const userId = userData?.$id ?? '';
     await updateSessionState({
       votes: currentSessionData?.sessionState.votes
         .filter((x) => x.userId !== userId)
@@ -106,6 +106,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
           {
             estimate: estimate,
             userId: userId,
+            username: userData?.name ?? '',
           },
         ]),
     });

@@ -7,6 +7,7 @@ import VoteList from './components/VoteList';
 import { Button, ButtonColor, Drawer } from '../../components';
 import CreateTicketForm from './components/CreateTicketForm';
 import CopyInput from '../../components/CopyInput';
+import PlayerList from './components/PlayerList';
 
 const fibonacciSequence = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 100];
 
@@ -35,6 +36,7 @@ const Estimation: React.FC = () => {
         currentPlayerVote,
         currentTicket,
       },
+      players,
     },
   } = estimationState;
 
@@ -83,6 +85,8 @@ const Estimation: React.FC = () => {
           <p>Select a task to see the details and estimate.</p>
         )}
       </div>
+
+      <PlayerList players={players ?? []} />
 
       <Drawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
         <CreateTicketForm

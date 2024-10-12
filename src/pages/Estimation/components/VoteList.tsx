@@ -16,7 +16,7 @@ const VoteList: React.FC<VoteListProps> = ({ className, votes, revealed }) => {
         itemComponent={({ item }, idx) => (
           <Card
             key={idx}
-            title={item.userId}
+            title={item.username}
             description={revealed ? item.estimate : 'Hidden'}
           />
         )}

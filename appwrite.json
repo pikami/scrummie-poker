@@ -52,6 +52,21 @@
       "entrypoint": "src/main.ts",
       "commands": "bun install",
       "path": "functions/EstimationSessionInvite"
+    },
+    {
+      "$id": "670a4b770001c5a71194",
+      "execute": [],
+      "name": "UsernameChangeHandler",
+      "enabled": true,
+      "logging": true,
+      "runtime": "go-1.23",
+      "scopes": ["users.read", "documents.read", "documents.write"],
+      "events": ["users.*.update.name"],
+      "schedule": "",
+      "timeout": 15,
+      "entrypoint": "main.go",
+      "commands": "",
+      "path": "functions/UsernameChangeHandler"
     }
   ],
   "databases": [
@@ -100,6 +115,22 @@
           "required": false,
           "array": false,
           "size": 1000,
+          "default": null
+        },
+        {
+          "key": "players",
+          "type": "string",
+          "required": false,
+          "array": true,
+          "size": 100,
+          "default": null
+        },
+        {
+          "key": "playerIds",
+          "type": "string",
+          "required": false,
+          "array": true,
+          "size": 100,
           "default": null
         }
       ],

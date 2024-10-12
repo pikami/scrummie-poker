@@ -11,22 +11,17 @@ import {
   databases,
   ESTIMATION_SESSION_COLLECTION_ID,
 } from '../appwrite';
-import { ID, Models, Query } from 'appwrite';
-import { EntityModels } from '../types';
-import { mapDatabaseToEntity } from '../mappers/estimationSession';
-
-interface EstimationSessionType extends Models.Document {
-  userId: string;
-  name: string;
-  tickets: string[];
-  sessionState: string;
-}
+import { ID, Query } from 'appwrite';
+import { DatabaseModels, EntityModels } from '../types';
+import {
+  mapDatabaseToEntity,
+  mapEntityToDatabase,
+} from '../mappers/estimationSession';
+import { useUser } from './user';
 
 interface EstimationsListContextType {
   current: EntityModels.EstimationSession[];
-  add: (
-    estimationSession: Omit<EstimationSessionType, keyof Models.Document>,
-  ) => Promise<void>;
+  add: (estimationSession: { name: string; userId?: string }) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
 
@@ -39,19 +34,38 @@ export function useEstimationsList() {
 }
 
 export function EstimationsListContextProvider(props: PropsWithChildren) {
+  const { current: userData } = useUser();
   const [estimationSessions, setEstimationSessions] = useState<
     EntityModels.EstimationSession[]
   >([]);
 
-  const add = async (
-    estimationSession: Omit<EstimationSessionType, keyof Models.Document>,
-  ) => {
-    const response = await databases.createDocument<EstimationSessionType>(
-      DATABASE_ID,
-      ESTIMATION_SESSION_COLLECTION_ID,
-      ID.unique(),
-      estimationSession,
-    );
+  const add = async (estimationSession: { name: string; userId?: string }) => {
+    if (!userData) {
+      throw Error('Tried to create new estimation with no user context');
+    }
+
+    const username =
+      userData.name.length > 0 ? userData.name : `Guest - ${userData.$id}`;
+
+    const newEstimationSession: Partial<EntityModels.EstimationSession> = {
+      name: estimationSession.name,
+      userId: userData.$id,
+      playerIds: [userData.$id],
+      players: [
+        {
+          userId: userData.$id,
+          name: username,
+        },
+      ],
+    };
+
+    const response =
+      await databases.createDocument<DatabaseModels.EstimationSession>(
+        DATABASE_ID,
+        ESTIMATION_SESSION_COLLECTION_ID,
+        ID.unique(),
+        mapEntityToDatabase(newEstimationSession),
+      );
     setEstimationSessions((estimationSessions) =>
       [mapDatabaseToEntity(response, {}), ...estimationSessions].slice(0, 10),
     );
@@ -72,11 +86,12 @@ export function EstimationsListContextProvider(props: PropsWithChildren) {
   };
 
   const init = async () => {
-    const response = await databases.listDocuments<EstimationSessionType>(
-      DATABASE_ID,
-      ESTIMATION_SESSION_COLLECTION_ID,
-      [Query.orderDesc('$createdAt'), Query.limit(10)],
-    );
+    const response =
+      await databases.listDocuments<DatabaseModels.EstimationSession>(
+        DATABASE_ID,
+        ESTIMATION_SESSION_COLLECTION_ID,
+        [Query.orderDesc('$createdAt'), Query.limit(10)],
+      );
     setEstimationSessions(
       response.documents.map((document) => mapDatabaseToEntity(document, {})),
     );
@@ -85,7 +100,7 @@ export function EstimationsListContextProvider(props: PropsWithChildren) {
   useEffect(() => {
     init();
 
-    return client.subscribe<EstimationSessionType>(
+    return client.subscribe<DatabaseModels.EstimationSession>(
       [
         `databases.${DATABASE_ID}.collections.${ESTIMATION_SESSION_COLLECTION_ID}.documents`,
       ],

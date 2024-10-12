@@ -3,12 +3,19 @@ import { useState } from 'react';
 import { useUser } from '../lib/context/user';
 
 const Header = () => {
-  const { logout } = useUser();
+  const { current, isLoading, logout } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  if (isLoading || !current) {
+    return null;
+  }
+
+  const userName =
+    current.name.length > 0 ? current.name : `Guest - ${current.$id}`;
 
   return (
     <header className="bg-white shadow-md transition-colors dark:bg-nero-700">
@@ -30,7 +37,7 @@ const Header = () => {
             className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
             onClick={toggleDropdown}
           >
-            Account <span aria-hidden="true">&darr;</span>
+            {userName} <span aria-hidden="true">&darr;</span>
           </button>
 
           {isDropdownOpen && (

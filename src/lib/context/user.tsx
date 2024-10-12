@@ -9,12 +9,13 @@ import {
 import { account } from '../appwrite';
 
 export interface UserContextType {
-  current: Models.Session | Models.User<Models.Preferences> | null;
+  current: Models.User<Models.Preferences> | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
   loginAsGuest: () => Promise<void>;
+  updateUsername: (username: string) => Promise<void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -28,14 +29,15 @@ export const useUser = () => {
 };
 
 export const UserProvider = (props: PropsWithChildren) => {
-  const [user, setUser] = useState<
-    Models.Session | Models.User<Models.Preferences> | null
-  >(null);
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const login = async (email: string, password: string) => {
-    const loggedIn = await account.createEmailPasswordSession(email, password);
-    setUser(loggedIn);
+    await account.createEmailPasswordSession(email, password);
+    const userData = await account.get();
+    setUser(userData);
 
     const params = new URLSearchParams(window.location.search);
     const redirectPath = params.get('redirect');
@@ -54,12 +56,18 @@ export const UserProvider = (props: PropsWithChildren) => {
   };
 
   const loginAsGuest = async () => {
-    const session = await account.createAnonymousSession();
-    setUser(session);
+    await account.createAnonymousSession();
+    const userData = await account.get();
+    setUser(userData);
 
     const params = new URLSearchParams(window.location.search);
     const redirectPath = params.get('redirect');
     window.location.replace(redirectPath || '/');
+  };
+
+  const updateUsername = async (username: string) => {
+    const user = await account.updateName(username);
+    setUser(user);
   };
 
   const init = async () => {
@@ -86,6 +94,7 @@ export const UserProvider = (props: PropsWithChildren) => {
         logout,
         register,
         loginAsGuest,
+        updateUsername,
       }}
     >
       {props.children}
