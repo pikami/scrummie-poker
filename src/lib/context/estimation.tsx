@@ -13,15 +13,17 @@ import {
 } from '../appwrite';
 import { DatabaseModels, EntityModels } from '../types';
 import { useUser } from './user';
-import { EstimationSessionTicket } from '../types/entityModels';
 import { mapDatabaseToEntity } from '../mappers/estimationSession';
+import { EditTicketRequest, CreateTicketRequest } from '../types/requestModels';
+import { EstimationSessionTicket } from '../types/entityModels';
 
 interface EstimationContextType {
   setSessionId: (sessionId: string) => void;
   setActiveTicket: (ticketId: string) => Promise<void>;
   setRevealed: (revealed: boolean) => Promise<void>;
   setVote: (estimate: string) => Promise<void>;
-  createTicket: (ticket: Omit<EstimationSessionTicket, 'id'>) => Promise<void>;
+  createTicket: (ticket: CreateTicketRequest) => Promise<void>;
+  updateTicket: (ticket: EditTicketRequest) => Promise<void>;
   currentSessionData?: EntityModels.EstimationSession;
 }
 
@@ -118,15 +120,39 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
     });
   };
 
-  const createTicket = async (ticket: Omit<EstimationSessionTicket, 'id'>) => {
-    const newTicketsValue = currentSessionData?.tickets
-      .concat([
-        {
-          ...ticket,
-          id: crypto.randomUUID(),
-        },
-      ])
+  const createTicket = async ({ name, content }: CreateTicketRequest) => {
+    const newTicket: EstimationSessionTicket = {
+      id: crypto.randomUUID(),
+      name,
+      content,
+    };
+
+    const newTicketsValue = [newTicket]
+      .concat(currentSessionData?.tickets ?? [])
       .map((x) => JSON.stringify(x));
+
+    await databases.updateDocument<DatabaseModels.EstimationSession>(
+      DATABASE_ID,
+      ESTIMATION_SESSION_COLLECTION_ID,
+      sessionId,
+      {
+        tickets: newTicketsValue,
+      },
+    );
+  };
+
+  const updateTicket = async ({ id, name, content }: EditTicketRequest) => {
+    const editedTicket = currentSessionData?.tickets.find((x) => x.id === id);
+    if (!editedTicket) {
+      return;
+    }
+
+    editedTicket.name = name;
+    editedTicket.content = content;
+
+    const newTicketsValue = currentSessionData?.tickets.map((x) =>
+      JSON.stringify(x),
+    );
 
     await databases.updateDocument<DatabaseModels.EstimationSession>(
       DATABASE_ID,
@@ -146,6 +172,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
         setRevealed,
         setVote,
         createTicket,
+        updateTicket,
         currentSessionData,
       }}
     >

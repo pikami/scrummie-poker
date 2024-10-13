@@ -1,12 +1,15 @@
 import React from 'react';
 import { EntityModels } from '../../../lib/types';
+import CopyInput from '../../../components/CopyInput';
 
 interface PlayerListProps {
+  sessionId: string;
   players: EntityModels.Player[];
   title?: string;
 }
 
 const PlayerList: React.FC<PlayerListProps> = ({
+  sessionId,
   players,
   title = 'Players',
 }) => {
@@ -32,6 +35,13 @@ const PlayerList: React.FC<PlayerListProps> = ({
           </li>
         )}
       </ul>
+
+      <div className="flex flex-row flex-wrap items-center justify-center gap-2">
+        <div className="text-l align-middle font-semibold">
+          Invite others to join your session
+        </div>
+        <CopyInput value={`${window.location.origin}/join/${sessionId}`} />
+      </div>
     </div>
   );
 };

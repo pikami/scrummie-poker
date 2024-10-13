@@ -1,6 +1,5 @@
 import { useForm } from '@tanstack/react-form';
 import { useEstimationsList } from '../../lib/context/estimationsList';
-import { useUser } from '../../lib/context/user';
 import Input from '../Input';
 import Button from '../Button';
 
@@ -11,7 +10,6 @@ interface CreateEstimationSessionFormProps {
 const CreateEstimationSessionForm: React.FC<
   CreateEstimationSessionFormProps
 > = ({ onCreated }) => {
-  const user = useUser();
   const estimationsList = useEstimationsList();
   const form = useForm({
     defaultValues: {
@@ -20,7 +18,6 @@ const CreateEstimationSessionForm: React.FC<
     onSubmit: async ({ value }) => {
       await estimationsList?.add({
         name: value.name,
-        userId: user.current?.$id,
       });
       onCreated();
     },

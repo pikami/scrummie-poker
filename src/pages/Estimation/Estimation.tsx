@@ -5,9 +5,9 @@ import TaskSidebar from './components/TaskSidebar';
 import VoteSelection from './components/VoteSelection';
 import VoteList from './components/VoteList';
 import { Button, ButtonColor, Drawer } from '../../components';
-import CreateTicketForm from './components/CreateTicketForm';
-import CopyInput from '../../components/CopyInput';
+import EditTicketForm from './components/EditTicketForm';
 import PlayerList from './components/PlayerList';
+import HtmlEmbed from '../../components/HtmlEmbed';
 
 const fibonacciSequence = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 100];
 
@@ -16,8 +16,10 @@ const route = getRouteApi('/_authenticated/estimate/session/$sessionId');
 const Estimation: React.FC = () => {
   const { sessionId } = route.useParams();
   const estimationState = useEstimationContext();
-  useEffect(() => estimationState?.setSessionId(sessionId), [sessionId]);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [editingTicketId, setEditingTicketId] = useState<string>('');
+
+  useEffect(() => estimationState?.setSessionId(sessionId), [sessionId]);
 
   if (!estimationState?.currentSessionData) {
     return null; // TODO: Add a loader
@@ -28,6 +30,7 @@ const Estimation: React.FC = () => {
     setVote,
     setRevealed,
     createTicket,
+    updateTicket,
     currentSessionData: {
       tickets: tickets,
       sessionState: {
@@ -47,24 +50,25 @@ const Estimation: React.FC = () => {
         tickets={tickets}
         onSelectTicket={(ticket) => setActiveTicket(ticket.id)}
         onAddTicket={() => setDrawerOpen(true)}
+        onEditTicket={(ticketId) => {
+          setEditingTicketId(ticketId);
+          setDrawerOpen(true);
+        }}
       />
 
       <div className="flex w-full flex-grow flex-col p-6">
-        <div className="flex items-center justify-center gap-2">
-          <span className="align-middle text-xl font-semibold">
-            Invite others to join your session
-          </span>
-          <CopyInput value={`${window.location.origin}/join/${sessionId}`} />
-        </div>
         {currentTicket ? (
           <>
             <h1 className="mb-4 text-2xl font-bold">{currentTicket.name}</h1>
-            <p className="mb-8 text-gray-700 dark:text-gray-200">
-              {currentTicket.id}
-            </p>
+            <div className="grow">
+              <HtmlEmbed
+                className="h-full w-full"
+                body={currentTicket.content}
+              />
+            </div>
 
             <VoteSelection
-              className="mb-4 mt-auto flex flex-wrap gap-1 space-x-4"
+              className="mb-4 flex flex-wrap gap-1 space-x-4"
               onSelect={(vote) => setVote(vote)}
               options={fibonacciSequence.map((x) => `${x}`)}
               value={currentPlayerVote}
@@ -86,12 +90,26 @@ const Estimation: React.FC = () => {
         )}
       </div>
 
-      <PlayerList players={players ?? []} />
+      <PlayerList sessionId={sessionId} players={players ?? []} />
 
-      <Drawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
-        <CreateTicketForm
-          onCreate={async (ticket) => {
-            await createTicket(ticket);
+      <Drawer
+        isOpen={isDrawerOpen}
+        onClose={() => {
+          setDrawerOpen(false);
+          setEditingTicketId('');
+        }}
+      >
+        <EditTicketForm
+          initialData={tickets.find((x) => x.id === editingTicketId)}
+          onSave={async (ticket) => {
+            if (editingTicketId.length > 0) {
+              await updateTicket({
+                ...ticket,
+                id: editingTicketId,
+              });
+            } else {
+              await createTicket(ticket);
+            }
             setDrawerOpen(false);
           }}
         />

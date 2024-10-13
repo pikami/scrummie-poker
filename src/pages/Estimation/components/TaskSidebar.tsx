@@ -6,6 +6,7 @@ interface TaskSidebarProps {
   tickets: EstimationSessionTicket[];
   onSelectTicket: (ticket: EstimationSessionTicket) => void;
   onAddTicket: () => void;
+  onEditTicket: (ticketId: string) => void;
 }
 
 const TaskSidebar: React.FC<TaskSidebarProps> = ({
@@ -13,6 +14,7 @@ const TaskSidebar: React.FC<TaskSidebarProps> = ({
   tickets,
   onSelectTicket,
   onAddTicket,
+  onEditTicket,
 }) => {
   return (
     <div className={className}>
@@ -23,8 +25,8 @@ const TaskSidebar: React.FC<TaskSidebarProps> = ({
           <Card
             key={item.id}
             title={item.name}
-            description={item.id}
             onClick={() => onSelectTicket(item)}
+            onEdit={() => onEditTicket(item.id)}
           />
         )}
         onAddItem={onAddTicket}

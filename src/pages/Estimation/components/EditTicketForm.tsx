@@ -1,18 +1,28 @@
 import { useForm } from '@tanstack/react-form';
 import { Button, Input } from '../../../components';
-import { EstimationSessionTicket } from '../../../lib/types/entityModels';
+import RichEditor from '../../../components/RichEditor';
 
-interface CreateTicketFormProps {
-  onCreate: (ticket: Omit<EstimationSessionTicket, 'id'>) => Promise<void>;
+interface EditTicketFormData {
+  name: string;
+  content: string;
 }
 
-const CreateTicketForm: React.FC<CreateTicketFormProps> = ({ onCreate }) => {
-  const form = useForm({
-    defaultValues: {
+interface EditTicketFormProps {
+  initialData?: EditTicketFormData;
+  onSave: (ticket: EditTicketFormData) => Promise<void>;
+}
+
+const EditTicketForm: React.FC<EditTicketFormProps> = ({
+  initialData,
+  onSave,
+}) => {
+  const form = useForm<EditTicketFormData>({
+    defaultValues: initialData ?? {
       name: '',
+      content: '',
     },
     onSubmit: async ({ value }) => {
-      await onCreate(value);
+      await onSave(value);
     },
   });
 
@@ -40,12 +50,22 @@ const CreateTicketForm: React.FC<CreateTicketFormProps> = ({ onCreate }) => {
             />
           )}
         />
+        <form.Field
+          name="content"
+          children={(field) => (
+            <RichEditor
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(value) => field.handleChange(value)}
+            />
+          )}
+        />
         <Button type="submit" fullWidth>
-          Create
+          Save
         </Button>
       </form>
     </div>
   );
 };
 
-export default CreateTicketForm;
+export default EditTicketForm;

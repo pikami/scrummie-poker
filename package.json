@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-react": "^9.3.0",
     "@tanstack/react-form": "^0.33.0",
     "@tanstack/react-router": "^1.62.0",
     "appwrite": "^16.0.2",

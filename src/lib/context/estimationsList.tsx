@@ -21,7 +21,7 @@ import { useUser } from './user';
 
 interface EstimationsListContextType {
   current: EntityModels.EstimationSession[];
-  add: (estimationSession: { name: string; userId?: string }) => Promise<void>;
+  add: (estimationSession: { name: string }) => Promise<void>;
   remove: (id: string) => Promise<void>;
 }
 
@@ -39,7 +39,7 @@ export function EstimationsListContextProvider(props: PropsWithChildren) {
     EntityModels.EstimationSession[]
   >([]);
 
-  const add = async (estimationSession: { name: string; userId?: string }) => {
+  const add = async (estimationSession: { name: string }) => {
     if (!userData) {
       throw Error('Tried to create new estimation with no user context');
     }
