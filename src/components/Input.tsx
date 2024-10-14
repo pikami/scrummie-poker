@@ -1,11 +1,15 @@
+import { ValidationError } from '@tanstack/react-form';
+
 const Input = ({
   label,
+  errors,
   ...props
 }: React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
   label?: string;
+  errors?: ValidationError[];
 }) => {
   return (
     <div>
@@ -18,6 +22,11 @@ const Input = ({
           {...props}
         />
       </div>
+      {errors?.map((error, key) => (
+        <em key={`${error}-${key}`} role="alert">
+          {error}
+        </em>
+      ))}
     </div>
   );
 };

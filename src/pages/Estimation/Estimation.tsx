@@ -16,7 +16,7 @@ const route = getRouteApi('/_authenticated/estimate/session/$sessionId');
 const Estimation: React.FC = () => {
   const { sessionId } = route.useParams();
   const estimationState = useEstimationContext();
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [editingTicketId, setEditingTicketId] = useState<string>('');
 
   useEffect(() => estimationState?.setSessionId(sessionId), [sessionId]);
@@ -32,10 +32,10 @@ const Estimation: React.FC = () => {
     createTicket,
     updateTicket,
     currentSessionData: {
-      tickets: tickets,
+      tickets,
       sessionState: {
         votesRevealed: revealed,
-        votes: votes,
+        votes,
         currentPlayerVote,
         currentTicket,
       },
@@ -49,10 +49,10 @@ const Estimation: React.FC = () => {
         className="w-64 overflow-y-scroll bg-gray-50 p-4 dark:bg-nero-800"
         tickets={tickets}
         onSelectTicket={(ticket) => setActiveTicket(ticket.id)}
-        onAddTicket={() => setDrawerOpen(true)}
+        onAddTicket={() => setIsDrawerOpen(true)}
         onEditTicket={(ticketId) => {
           setEditingTicketId(ticketId);
-          setDrawerOpen(true);
+          setIsDrawerOpen(true);
         }}
       />
 
@@ -95,7 +95,7 @@ const Estimation: React.FC = () => {
       <Drawer
         isOpen={isDrawerOpen}
         onClose={() => {
-          setDrawerOpen(false);
+          setIsDrawerOpen(false);
           setEditingTicketId('');
         }}
       >
@@ -110,7 +110,7 @@ const Estimation: React.FC = () => {
             } else {
               await createTicket(ticket);
             }
-            setDrawerOpen(false);
+            setIsDrawerOpen(false);
           }}
         />
       </Drawer>

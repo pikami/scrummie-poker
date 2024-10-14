@@ -2,6 +2,8 @@ import { useForm } from '@tanstack/react-form';
 import { useEstimationsList } from '../../lib/context/estimationsList';
 import Input from '../Input';
 import Button from '../Button';
+import { yupValidator } from '@tanstack/yup-form-adapter';
+import * as yup from 'yup';
 
 interface CreateEstimationSessionFormProps {
   onCreated: () => void;
@@ -21,6 +23,12 @@ const CreateEstimationSessionForm: React.FC<
       });
       onCreated();
     },
+    validators: {
+      onChange: yup.object({
+        name: yup.string().label('Name').max(200).required(),
+      }),
+    },
+    validatorAdapter: yupValidator(),
   });
 
   return (
@@ -36,21 +44,25 @@ const CreateEstimationSessionForm: React.FC<
           form.handleSubmit();
         }}
       >
-        <form.Field
-          name="name"
-          children={(field) => (
+        <form.Field name="name">
+          {(field) => (
             <Input
               label="Name"
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
+              errors={field.state.meta.errors}
             />
           )}
-        />
-        <Button type="submit" fullWidth>
-          Create
-        </Button>
+        </form.Field>
+        <form.Subscribe selector={(state) => [state.canSubmit]}>
+          {([canSubmit]) => (
+            <Button type="submit" disabled={!canSubmit} fullWidth>
+              Create
+            </Button>
+          )}
+        </form.Subscribe>
       </form>
     </>
   );

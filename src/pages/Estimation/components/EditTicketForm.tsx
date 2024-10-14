@@ -1,6 +1,8 @@
 import { useForm } from '@tanstack/react-form';
 import { Button, Input } from '../../../components';
 import RichEditor from '../../../components/RichEditor';
+import { yupValidator } from '@tanstack/yup-form-adapter';
+import * as yup from 'yup';
 
 interface EditTicketFormData {
   name: string;
@@ -16,7 +18,7 @@ const EditTicketForm: React.FC<EditTicketFormProps> = ({
   initialData,
   onSave,
 }) => {
-  const form = useForm<EditTicketFormData>({
+  const form = useForm({
     defaultValues: initialData ?? {
       name: '',
       content: '',
@@ -24,6 +26,12 @@ const EditTicketForm: React.FC<EditTicketFormProps> = ({
     onSubmit: async ({ value }) => {
       await onSave(value);
     },
+    validators: {
+      onChange: yup.object({
+        name: yup.string().label('Name').max(200).required(),
+      }),
+    },
+    validatorAdapter: yupValidator(),
   });
 
   return (
@@ -37,9 +45,8 @@ const EditTicketForm: React.FC<EditTicketFormProps> = ({
           form.handleSubmit();
         }}
       >
-        <form.Field
-          name="name"
-          children={(field) => (
+        <form.Field name="name">
+          {(field) => (
             <Input
               label="Name"
               required
@@ -47,22 +54,26 @@ const EditTicketForm: React.FC<EditTicketFormProps> = ({
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
+              errors={field.state.meta.errors}
             />
           )}
-        />
-        <form.Field
-          name="content"
-          children={(field) => (
+        </form.Field>
+        <form.Field name="content">
+          {(field) => (
             <RichEditor
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(value) => field.handleChange(value)}
             />
           )}
-        />
-        <Button type="submit" fullWidth>
-          Save
-        </Button>
+        </form.Field>
+        <form.Subscribe selector={(state) => [state.canSubmit]}>
+          {([canSubmit]) => (
+            <Button type="submit" disabled={!canSubmit} fullWidth>
+              Update
+            </Button>
+          )}
+        </form.Subscribe>
       </form>
     </div>
   );

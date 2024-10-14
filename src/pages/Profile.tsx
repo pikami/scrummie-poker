@@ -1,6 +1,8 @@
 import { useForm } from '@tanstack/react-form';
 import { Button, Input } from '../components';
 import { useUser } from '../lib/context/user';
+import { yupValidator } from '@tanstack/yup-form-adapter';
+import * as yup from 'yup';
 
 const Profile = () => {
   const user = useUser();
@@ -12,6 +14,12 @@ const Profile = () => {
       await user.updateUsername(value.name);
       updateUsernameForm.reset();
     },
+    validators: {
+      onChange: yup.object({
+        name: yup.string().label('Name').max(128).required(),
+      }),
+    },
+    validatorAdapter: yupValidator(),
   });
 
   return (
@@ -28,21 +36,27 @@ const Profile = () => {
             updateUsernameForm.handleSubmit();
           }}
         >
-          <updateUsernameForm.Field
-            name="name"
-            children={(field) => (
-              <Input
-                label="Name"
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-              />
+          <updateUsernameForm.Field name="name">
+            {(field) => {
+              return (
+                <Input
+                  label="Name"
+                  name={field.name}
+                  value={field.state.value}
+                  onBlur={field.handleBlur}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  errors={field.state.meta.errors}
+                />
+              );
+            }}
+          </updateUsernameForm.Field>
+          <updateUsernameForm.Subscribe selector={(state) => [state.canSubmit]}>
+            {([canSubmit]) => (
+              <Button type="submit" disabled={!canSubmit} fullWidth>
+                Update
+              </Button>
             )}
-          />
-          <Button type="submit" fullWidth>
-            Update
-          </Button>
+          </updateUsernameForm.Subscribe>
         </form>
       </div>
     </div>

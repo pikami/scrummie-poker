@@ -21,9 +21,9 @@ const PlayerList: React.FC<PlayerListProps> = ({
 
       <ul className="max-h-48 divide-y divide-gray-300 overflow-y-auto dark:divide-gray-600">
         {players.length > 0 ? (
-          players.map((player, index) => (
+          players.map((player) => (
             <li
-              key={index}
+              key={player.userId}
               className="py-2 text-sm text-gray-900 dark:text-gray-100"
             >
               {player.name}

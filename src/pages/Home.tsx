@@ -1,4 +1,3 @@
-import './Home.css';
 import { getRouteApi, Link } from '@tanstack/react-router';
 import { useUser } from '../lib/context/user';
 import { useEstimationsList } from '../lib/context/estimationsList';
@@ -16,7 +15,7 @@ function Home() {
   const user = useUser();
   const navigate = route.useNavigate();
   const estimationsList = useEstimationsList();
-  const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
     <>
@@ -47,12 +46,12 @@ function Home() {
               }}
             />
           )}
-          onAddItem={() => setDrawerOpen(true)}
+          onAddItem={() => setIsDrawerOpen(true)}
         />
       </div>
 
-      <Drawer isOpen={isDrawerOpen} onClose={() => setDrawerOpen(false)}>
-        <CreateEstimationSessionForm onCreated={() => setDrawerOpen(false)} />
+      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+        <CreateEstimationSessionForm onCreated={() => setIsDrawerOpen(false)} />
       </Drawer>
     </>
   );
