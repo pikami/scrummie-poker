@@ -141,14 +141,28 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
     );
   };
 
-  const updateTicket = async ({ id, name, content }: EditTicketRequest) => {
+  const updateTicket = async ({
+    id,
+    name,
+    content,
+    estimate,
+  }: EditTicketRequest) => {
     const editedTicket = currentSessionData?.tickets.find((x) => x.id === id);
     if (!editedTicket) {
       return;
     }
 
-    editedTicket.name = name;
-    editedTicket.content = content;
+    if (name !== undefined) {
+      editedTicket.name = name;
+    }
+
+    if (content !== undefined) {
+      editedTicket.content = content;
+    }
+
+    if (estimate !== undefined) {
+      editedTicket.estimate = estimate;
+    }
 
     const newTicketsValue = currentSessionData?.tickets.map((x) =>
       JSON.stringify(x),

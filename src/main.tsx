@@ -43,10 +43,12 @@ const authenticatedRoute = createRoute({
   },
   component: () => {
     return (
-      <>
+      <div className="flex h-screen flex-col">
         <Header />
-        <Outlet />
-      </>
+        <div className="flex-grow">
+          <Outlet />
+        </div>
+      </div>
     );
   },
 });

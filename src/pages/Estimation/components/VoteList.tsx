@@ -10,7 +10,9 @@ interface VoteListProps {
 const VoteList: React.FC<VoteListProps> = ({ className, votes, revealed }) => {
   return (
     <div className={className}>
-      <h2 className="mb-4 text-xl font-bold">Player Votes</h2>
+      {votes.length > 0 && (
+        <h2 className="mb-4 text-xl font-bold">Player Votes</h2>
+      )}
       <GridList
         colNum={5}
         itemComponent={({ item }, idx) => (

@@ -4,10 +4,11 @@ import { getRouteApi } from '@tanstack/react-router';
 import TaskSidebar from './components/TaskSidebar';
 import VoteSelection from './components/VoteSelection';
 import VoteList from './components/VoteList';
-import { Button, ButtonColor, Drawer } from '../../components';
+import { Drawer } from '../../components';
 import EditTicketForm from './components/EditTicketForm';
 import PlayerList from './components/PlayerList';
 import HtmlEmbed from '../../components/HtmlEmbed';
+import EstimationResult from './components/EstimationResult';
 
 const fibonacciSequence = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 100];
 
@@ -44,7 +45,7 @@ const Estimation: React.FC = () => {
   } = estimationState;
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-full">
       <TaskSidebar
         className="w-64 overflow-y-scroll bg-gray-50 p-4 dark:bg-nero-800"
         tickets={tickets}
@@ -76,14 +77,20 @@ const Estimation: React.FC = () => {
 
             <VoteList className="mt-6" revealed={revealed} votes={votes} />
 
-            <div className="mt-4">
-              <Button
-                color={ButtonColor.Error}
-                onClick={() => setRevealed(true)}
-              >
-                Reveal Votes
-              </Button>
-            </div>
+            <EstimationResult
+              className="mt-6"
+              revealed={revealed}
+              votes={votes}
+              setRevealed={setRevealed}
+              onSetEstimate={async (estimate: string) => {
+                await updateTicket({
+                  id: currentTicket.id,
+                  estimate,
+                });
+
+                await setActiveTicket(currentTicket.id);
+              }}
+            />
           </>
         ) : (
           <p>Select a task to see the details and estimate.</p>

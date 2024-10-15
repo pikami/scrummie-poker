@@ -25,6 +25,7 @@ const TaskSidebar: React.FC<TaskSidebarProps> = ({
           <Card
             key={item.id}
             title={item.name}
+            description={item.estimate && `Estimate: ${item.estimate}`}
             onClick={() => onSelectTicket(item)}
             onEdit={() => onEditTicket(item.id)}
           />

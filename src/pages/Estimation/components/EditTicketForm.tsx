@@ -6,6 +6,7 @@ import * as yup from 'yup';
 
 interface EditTicketFormData {
   name: string;
+  estimate?: string;
   content: string;
 }
 
@@ -21,6 +22,7 @@ const EditTicketForm: React.FC<EditTicketFormProps> = ({
   const form = useForm({
     defaultValues: initialData ?? {
       name: '',
+      estimate: '',
       content: '',
     },
     onSubmit: async ({ value }) => {
@@ -50,6 +52,18 @@ const EditTicketForm: React.FC<EditTicketFormProps> = ({
             <Input
               label="Name"
               required
+              name={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+              errors={field.state.meta.errors}
+            />
+          )}
+        </form.Field>
+        <form.Field name="estimate">
+          {(field) => (
+            <Input
+              label="Estimate"
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}

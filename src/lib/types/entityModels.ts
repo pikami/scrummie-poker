@@ -12,6 +12,7 @@ interface EstimationSessionTicket {
   id: string;
   name: string;
   content: string;
+  estimate?: string;
 }
 
 interface SessionState {
