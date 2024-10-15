@@ -65,12 +65,10 @@ const Login = () => {
             )}
           </form.Field>
 
-          <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
-          >
-            {([canSubmit, isSubmitting]) => (
+          <form.Subscribe selector={(state) => [state.canSubmit]}>
+            {([canSubmit]) => (
               <div>
-                {/* TODO: Add loader when submitting */}
+                {/* TODO: Add loader when [state.isSubmitting] */}
                 <div className="flex items-center justify-between gap-4">
                   <Button
                     disabled={!canSubmit}
