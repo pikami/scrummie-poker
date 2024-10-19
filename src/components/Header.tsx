@@ -26,9 +26,9 @@ const Header = () => {
         <div className="flex lg:flex-1">
           <Link
             to="/"
-            className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
+            className="flex flex-row items-center gap-2 text-sm font-semibold leading-6 text-gray-900 dark:text-gray-100"
           >
-            Scrummie-Poker
+            <img className="h-8 w-auto" src="/icon.svg" alt="" /> Scrummie-Poker
           </Link>
         </div>
 
