@@ -81,9 +81,15 @@ const EstimationResult: React.FC<VoteListProps> = ({
             />
           )}
         </form.Field>
-        <form.Subscribe selector={(state) => [state.canSubmit]}>
-          {([canSubmit]) => (
-            <Button type="submit" disabled={!canSubmit}>
+        <form.Subscribe
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
+        >
+          {([canSubmit, isSubmitting]) => (
+            <Button
+              type="submit"
+              disabled={!canSubmit}
+              isLoading={isSubmitting}
+            >
               Save
             </Button>
           )}

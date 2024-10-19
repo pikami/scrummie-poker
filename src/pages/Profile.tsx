@@ -50,9 +50,16 @@ const Profile = () => {
               );
             }}
           </updateUsernameForm.Field>
-          <updateUsernameForm.Subscribe selector={(state) => [state.canSubmit]}>
-            {([canSubmit]) => (
-              <Button type="submit" disabled={!canSubmit} fullWidth>
+          <updateUsernameForm.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
+            {([canSubmit, isSubmitting]) => (
+              <Button
+                type="submit"
+                disabled={!canSubmit}
+                isLoading={isSubmitting}
+                fullWidth
+              >
                 Update
               </Button>
             )}

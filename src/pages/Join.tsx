@@ -5,6 +5,7 @@ import {
   SessionInviteInfo,
 } from '../lib/functions/estimationSessionInvite';
 import { getRouteApi } from '@tanstack/react-router';
+import { Loader } from '../components';
 
 const route = getRouteApi('/_authenticated/join/$sessionId');
 
@@ -40,8 +41,7 @@ const Join = () => {
   };
 
   if (!sessionInfo || isLoading) {
-    // TODO: add loader
-    return <p>Loading...</p>;
+    return <Loader fullHeight center />;
   }
 
   if (!sessionInfo.success) {

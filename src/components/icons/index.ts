@@ -1,3 +1,4 @@
 import PencilIcon from './PencilIcon';
+import LoaderIcon from './LoaderIcon';
 
-export { PencilIcon };
+export { PencilIcon, LoaderIcon };

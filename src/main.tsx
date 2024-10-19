@@ -18,6 +18,7 @@ import Estimation from './pages/Estimation/Estimation';
 import Header from './components/Header';
 import Profile from './pages/Profile';
 import Join from './pages/Join';
+import { Loader } from './components';
 
 interface RouterContext {
   userContext: UserContextType;
@@ -108,7 +109,7 @@ const InnerApp = () => {
   const userContext = useUser();
 
   return userContext.isLoading ? (
-    <p>Loading...</p>
+    <Loader className="h-screen" fullHeight center />
   ) : (
     <RouterProvider router={router} context={{ userContext }} />
   );

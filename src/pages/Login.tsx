@@ -65,13 +65,14 @@ const Login = () => {
             )}
           </form.Field>
 
-          <form.Subscribe selector={(state) => [state.canSubmit]}>
-            {([canSubmit]) => (
+          <form.Subscribe
+            selector={(state) => [state.canSubmit, state.isSubmitting]}
+          >
+            {([canSubmit, isSubmitting]) => (
               <div>
-                {/* TODO: Add loader when [state.isSubmitting] */}
                 <div className="flex items-center justify-between gap-4">
                   <Button
-                    disabled={!canSubmit}
+                    disabled={!canSubmit || isSubmitting}
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -85,7 +86,7 @@ const Login = () => {
                   </Button>
 
                   <Button
-                    disabled={!canSubmit}
+                    disabled={!canSubmit || isSubmitting}
                     color={ButtonColor.Secondary}
                     onClick={(e) => {
                       e.preventDefault();

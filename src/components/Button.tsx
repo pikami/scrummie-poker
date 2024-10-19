@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import Loader, { LoaderSize } from './Loader';
 
 enum ButtonColor {
   Primary = 'primary',
@@ -10,6 +11,7 @@ enum ButtonColor {
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   color?: ButtonColor;
   fullWidth?: boolean;
+  isLoading?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -17,10 +19,13 @@ const Button: React.FC<ButtonProps> = ({
   color = ButtonColor.Primary,
   fullWidth = false,
   disabled = false,
+  isLoading = false,
   ...props
 }) => {
+  disabled = disabled || isLoading;
+
   const buttonClass = classNames(
-    'flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2',
+    'flex justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 text-center items-center',
     {
       'bg-indigo-600 hover:bg-indigo-500 focus-visible:outline-indigo-600':
         color === ButtonColor.Primary && !disabled,
@@ -38,6 +43,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button className={buttonClass} disabled={disabled} {...props}>
+      {isLoading && <Loader className="me-2" center size={LoaderSize.Small} />}
       {children}
     </button>
   );

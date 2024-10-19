@@ -4,7 +4,7 @@ import { getRouteApi } from '@tanstack/react-router';
 import TaskSidebar from './components/TaskSidebar';
 import VoteSelection from './components/VoteSelection';
 import VoteList from './components/VoteList';
-import { Drawer } from '../../components';
+import { Drawer, Loader } from '../../components';
 import EditTicketForm from './components/EditTicketForm';
 import PlayerList from './components/PlayerList';
 import HtmlEmbed from '../../components/HtmlEmbed';
@@ -22,8 +22,8 @@ const Estimation: React.FC = () => {
 
   useEffect(() => estimationState?.setSessionId(sessionId), [sessionId]);
 
-  if (!estimationState?.currentSessionData) {
-    return null; // TODO: Add a loader
+  if (estimationState?.currentSessionData?.id !== sessionId) {
+    return <Loader fullHeight center />;
   }
 
   const {

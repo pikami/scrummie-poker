@@ -56,9 +56,16 @@ const CreateEstimationSessionForm: React.FC<
             />
           )}
         </form.Field>
-        <form.Subscribe selector={(state) => [state.canSubmit]}>
-          {([canSubmit]) => (
-            <Button type="submit" disabled={!canSubmit} fullWidth>
+        <form.Subscribe
+          selector={(state) => [state.canSubmit, state.isSubmitting]}
+        >
+          {([canSubmit, isSubmitting]) => (
+            <Button
+              type="submit"
+              disabled={!canSubmit}
+              isLoading={isSubmitting}
+              fullWidth
+            >
               Create
             </Button>
           )}
