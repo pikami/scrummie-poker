@@ -1,14 +1,20 @@
 import classNames from 'classnames';
 import { PencilIcon } from './icons';
 
-interface CardProps {
+interface CardProps extends React.PropsWithChildren {
   title: string;
   description?: string;
   onClick?: () => void;
   onEdit?: () => void;
 }
 
-const Card: React.FC<CardProps> = ({ title, description, onClick, onEdit }) => {
+const Card: React.FC<CardProps> = ({
+  title,
+  description,
+  onClick,
+  onEdit,
+  children,
+}) => {
   const className = classNames(
     'p-4 border rounded-lg shadow-sm transition',
     {
@@ -20,7 +26,7 @@ const Card: React.FC<CardProps> = ({ title, description, onClick, onEdit }) => {
   );
 
   return (
-    <div className={className} onClick={onClick}>
+    <div className={className} onClick={onClick} title={title}>
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold">{title}</h3>
         {onEdit && (
@@ -36,6 +42,7 @@ const Card: React.FC<CardProps> = ({ title, description, onClick, onEdit }) => {
           </button>
         )}
       </div>
+      {children}
       {description && <p className="mt-2">{description}</p>}
     </div>
   );

@@ -1,5 +1,8 @@
-import { Card, GridList } from '../../../components';
+import classNames from 'classnames';
+import { Button, Card, Drawer, GridList } from '../../../components';
 import { EstimationSessionTicket } from '../../../lib/types/entityModels';
+import TicketImportForm from './TicketImportForm';
+import { useState } from 'react';
 
 interface TaskSidebarProps {
   className?: string;
@@ -16,9 +19,16 @@ const TaskSidebar: React.FC<TaskSidebarProps> = ({
   onAddTicket,
   onEditTicket,
 }) => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const containerClassName = classNames(
+    className,
+    'flex flex-col justify-between',
+  );
+
   return (
-    <div className={className}>
+    <div className={containerClassName}>
       <GridList
+        className="no-scrollbar overflow-y-scroll"
         items={tickets}
         colNum={1}
         itemComponent={({ item }) => (
@@ -30,8 +40,15 @@ const TaskSidebar: React.FC<TaskSidebarProps> = ({
             onEdit={() => onEditTicket(item.id)}
           />
         )}
+        addItemLabel="+ Add Ticket"
         onAddItem={onAddTicket}
       />
+      <Button className="mt-2" fullWidth onClick={() => setIsDrawerOpen(true)}>
+        Import Tickets
+      </Button>
+      <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
+        <TicketImportForm onTicketsImported={() => setIsDrawerOpen(false)} />
+      </Drawer>
     </div>
   );
 };

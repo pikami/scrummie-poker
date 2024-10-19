@@ -46,7 +46,7 @@ const authenticatedRoute = createRoute({
     return (
       <div className="flex h-screen flex-col">
         <Header />
-        <div className="flex-grow">
+        <div className="flex-grow overflow-auto">
           <Outlet />
         </div>
       </div>

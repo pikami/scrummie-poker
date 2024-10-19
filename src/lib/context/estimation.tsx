@@ -23,6 +23,7 @@ interface EstimationContextType {
   setRevealed: (revealed: boolean) => Promise<void>;
   setVote: (estimate: string) => Promise<void>;
   createTicket: (ticket: CreateTicketRequest) => Promise<void>;
+  createTickets: (tickets: CreateTicketRequest[]) => Promise<void>;
   updateTicket: (ticket: EditTicketRequest) => Promise<void>;
   currentSessionData?: EntityModels.EstimationSession;
 }
@@ -120,14 +121,19 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
     });
   };
 
-  const createTicket = async ({ name, content }: CreateTicketRequest) => {
-    const newTicket: EstimationSessionTicket = {
-      id: crypto.randomUUID(),
-      name,
-      content,
-    };
+  const createTicket = (ticket: CreateTicketRequest) => createTickets([ticket]);
 
-    const newTicketsValue = [newTicket]
+  const createTickets = async (tickets: CreateTicketRequest[]) => {
+    const newTickets = tickets.map<EstimationSessionTicket>(
+      ({ content, name, estimate }) => ({
+        id: crypto.randomUUID(),
+        name,
+        content,
+        estimate,
+      }),
+    );
+
+    const newTicketsValue = newTickets
       .concat(currentSessionData?.tickets ?? [])
       .map((x) => JSON.stringify(x));
 
@@ -186,6 +192,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
         setRevealed,
         setVote,
         createTicket,
+        createTickets,
         updateTicket,
         currentSessionData,
       }}

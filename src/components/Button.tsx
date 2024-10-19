@@ -20,6 +20,7 @@ const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   disabled = false,
   isLoading = false,
+  className,
   ...props
 }) => {
   disabled = disabled || isLoading;
@@ -39,6 +40,7 @@ const Button: React.FC<ButtonProps> = ({
       'text-white': !disabled,
       'w-full': fullWidth,
     },
+    className,
   );
 
   return (

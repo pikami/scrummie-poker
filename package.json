@@ -16,14 +16,18 @@
     "@tanstack/yup-form-adapter": "^0.33.0",
     "appwrite": "^16.0.2",
     "classnames": "^2.5.1",
+    "papaparse": "^5.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "showdown": "^2.1.0",
     "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
+    "@types/papaparse": "^5.3.15",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
+    "@types/showdown": "^2.0.6",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.11.1",

@@ -1,6 +1,6 @@
 interface HtmlEmbedProps {
   body: string;
-  className: string;
+  className?: string;
 }
 
 const HtmlEmbed: React.FC<HtmlEmbedProps> = ({ body, className }) => {

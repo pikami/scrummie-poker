@@ -14,12 +14,12 @@ const PlayerList: React.FC<PlayerListProps> = ({
   title = 'Players',
 }) => {
   return (
-    <div className="w-full max-w-sm rounded-lg bg-white p-6 shadow-lg dark:bg-nero-800">
+    <div className="flex w-full max-w-sm flex-col justify-between rounded-lg bg-white p-6 shadow-lg dark:bg-nero-800">
       <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-gray-100">
         {title}
       </h2>
 
-      <ul className="max-h-48 divide-y divide-gray-300 overflow-y-auto dark:divide-gray-600">
+      <ul className="flex-grow divide-y divide-gray-300 overflow-y-auto dark:divide-gray-600">
         {players.length > 0 ? (
           players.map((player) => (
             <li
