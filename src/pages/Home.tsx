@@ -1,5 +1,4 @@
-import { getRouteApi, Link } from '@tanstack/react-router';
-import { useUser } from '../lib/context/user';
+import { getRouteApi } from '@tanstack/react-router';
 import { useEstimationsList } from '../lib/context/estimationsList';
 import {
   Card,
@@ -12,48 +11,38 @@ import { useState } from 'react';
 const route = getRouteApi('/_authenticated/');
 
 function Home() {
-  const user = useUser();
   const navigate = route.useNavigate();
   const estimationsList = useEstimationsList();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Scrummie-Poker</h1>
+    <div className="p-6">
+      <h1 className="text-3xl font-bold">Estimation sessions</h1>
 
-      <ul>
-        <li>
-          <Link to="/login">Login</Link>
-        </li>
-      </ul>
-      <pre>User Id: {user.current?.$id}</pre>
-
-      <div>
-        <p>Estimation sessions</p>
-        <GridList
-          colNum={2}
-          items={estimationsList?.current ?? []}
-          itemComponent={({ item }) => (
-            <Card
-              key={item.id}
-              title={item.name}
-              description={item.id}
-              onClick={() => {
-                navigate({
-                  to: '/estimate/session/$sessionId',
-                  params: { sessionId: item.id },
-                });
-              }}
-            />
-          )}
-          onAddItem={() => setIsDrawerOpen(true)}
-        />
-      </div>
+      <GridList
+        colNum={2}
+        className="my-3"
+        items={estimationsList?.current ?? []}
+        itemComponent={({ item }) => (
+          <Card
+            key={item.id}
+            title={item.name}
+            onClick={() => {
+              navigate({
+                to: '/estimate/session/$sessionId',
+                params: { sessionId: item.id },
+              });
+            }}
+          />
+        )}
+        addItemLabel="+ Create Estimation Session"
+        onAddItem={() => setIsDrawerOpen(true)}
+      />
 
       <Drawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)}>
         <CreateEstimationSessionForm onCreated={() => setIsDrawerOpen(false)} />
       </Drawer>
-    </>
+    </div>
   );
 }
 

@@ -45,6 +45,7 @@ const Header = () => {
               <Link
                 className="block px-4 py-2 text-sm text-gray-900 hover:bg-gray-100 dark:text-gray-100 dark:hover:bg-nero-700"
                 to="/profile"
+                onClick={() => setIsDropdownOpen(false)}
               >
                 Profile
               </Link>
