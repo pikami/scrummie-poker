@@ -1,8 +1,9 @@
 import { useForm } from '@tanstack/react-form';
-import { useUser } from '../lib/context/user';
-import { Button, ButtonColor, Input } from '../components';
+import { useUser } from 'src/lib/context/user';
+import { Button, ButtonColor, Card, Input } from 'src/components';
 import { yupValidator } from '@tanstack/yup-form-adapter';
 import * as yup from 'yup';
+import { Link } from '@tanstack/react-router';
 
 const Login = () => {
   const user = useUser();
@@ -24,14 +25,11 @@ const Login = () => {
   });
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight">
-          Sign in to your account
-        </h2>
-      </div>
-
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+    <div className="flex h-screen flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <Card
+        title="Sign in to your account"
+        className="sm:mx-auto sm:w-full sm:max-w-sm"
+      >
         <form className="space-y-6">
           <form.Field name="email">
             {(field) => (
@@ -107,15 +105,14 @@ const Login = () => {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Don't want to create an account?{' '}
-          <a
-            href="#"
+          <Link
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             onClick={() => user.loginAsGuest()}
           >
             Sign in as a guest
-          </a>
+          </Link>
         </p>
-      </div>
+      </Card>
     </div>
   );
 };

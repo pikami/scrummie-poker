@@ -1,9 +1,8 @@
 import { useForm } from '@tanstack/react-form';
-import { useEstimationsList } from '../../lib/context/estimationsList';
-import Input from '../Input';
-import Button from '../Button';
+import { useEstimationsList } from 'src/lib/context/estimationsList';
 import { yupValidator } from '@tanstack/yup-form-adapter';
 import * as yup from 'yup';
+import { Input, Button } from 'src/components';
 
 interface CreateEstimationSessionFormProps {
   onCreated: () => void;

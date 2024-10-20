@@ -1,6 +1,6 @@
 import classNames from 'classnames';
-import { Button, Card, Drawer, GridList } from '../../../components';
-import { EstimationSessionTicket } from '../../../lib/types/entityModels';
+import { Button, Card, Drawer, GridList } from 'src/components';
+import { EstimationSessionTicket } from 'src/lib/types/entityModels';
 import TicketImportForm from './TicketImportForm';
 import { useState } from 'react';
 

@@ -10,21 +10,21 @@ import {
   DATABASE_ID,
   databases,
   ESTIMATION_SESSION_COLLECTION_ID,
-} from '../appwrite';
-import { DatabaseModels, EntityModels } from '../types';
+} from 'src/lib/appwrite';
 import { useUser } from './user';
-import { mapDatabaseToEntity } from '../mappers/estimationSession';
-import { EditTicketRequest, CreateTicketRequest } from '../types/requestModels';
-import { EstimationSessionTicket } from '../types/entityModels';
+import { mapDatabaseToEntity } from 'src/lib/mappers/estimationSession';
+import { RequestModels, DatabaseModels, EntityModels } from 'src/lib/types';
 
 interface EstimationContextType {
   setSessionId: (sessionId: string) => void;
   setActiveTicket: (ticketId: string) => Promise<void>;
   setRevealed: (revealed: boolean) => Promise<void>;
   setVote: (estimate: string) => Promise<void>;
-  createTicket: (ticket: CreateTicketRequest) => Promise<void>;
-  createTickets: (tickets: CreateTicketRequest[]) => Promise<void>;
-  updateTicket: (ticket: EditTicketRequest) => Promise<void>;
+  createTicket: (ticket: RequestModels.CreateTicketRequest) => Promise<void>;
+  createTickets: (
+    tickets: RequestModels.CreateTicketRequest[],
+  ) => Promise<void>;
+  updateTicket: (ticket: RequestModels.EditTicketRequest) => Promise<void>;
   currentSessionData?: EntityModels.EstimationSession;
 }
 
@@ -121,10 +121,13 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
     });
   };
 
-  const createTicket = (ticket: CreateTicketRequest) => createTickets([ticket]);
+  const createTicket = (ticket: RequestModels.CreateTicketRequest) =>
+    createTickets([ticket]);
 
-  const createTickets = async (tickets: CreateTicketRequest[]) => {
-    const newTickets = tickets.map<EstimationSessionTicket>(
+  const createTickets = async (
+    tickets: RequestModels.CreateTicketRequest[],
+  ) => {
+    const newTickets = tickets.map<EntityModels.EstimationSessionTicket>(
       ({ content, name, estimate }) => ({
         id: crypto.randomUUID(),
         name,
@@ -152,7 +155,7 @@ export const EstimationContextProvider = (props: PropsWithChildren) => {
     name,
     content,
     estimate,
-  }: EditTicketRequest) => {
+  }: RequestModels.EditTicketRequest) => {
     const editedTicket = currentSessionData?.tickets.find((x) => x.id === id);
     if (!editedTicket) {
       return;

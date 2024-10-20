@@ -4,11 +4,10 @@ import { getRouteApi } from '@tanstack/react-router';
 import TaskSidebar from './components/TaskSidebar';
 import VoteSelection from './components/VoteSelection';
 import VoteList from './components/VoteList';
-import { Drawer, Loader } from '../../components';
 import EditTicketForm from './components/EditTicketForm';
 import PlayerList from './components/PlayerList';
-import HtmlEmbed from '../../components/HtmlEmbed';
 import EstimationResult from './components/EstimationResult';
+import { Drawer, HtmlEmbed, Loader } from 'src/components';
 
 const fibonacciSequence = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 100];
 

@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { Button } from 'src/components';
 
 interface VoteSelectionProps {
   className: string;
@@ -15,20 +16,20 @@ const VoteSelection: React.FC<VoteSelectionProps> = ({
 }) => {
   const getItemClassName = (option: string) =>
     classNames('rounded-md px-4 py-2 text-white transition-colors', {
-      'bg-indigo-800': value !== option,
-      'bg-indigo-600 hover:bg-indigo-500': value === option,
+      'bg-indigo-800': value === option,
+      'bg-indigo-600 hover:bg-indigo-500': value !== option,
     });
 
   return (
     <div className={className}>
       {options.map((option) => (
-        <button
+        <Button
           key={option}
-          className={getItemClassName(option)}
           onClick={() => onSelect(option)}
+          className={getItemClassName(option)}
         >
           {option}
-        </button>
+        </Button>
       ))}
     </div>
   );

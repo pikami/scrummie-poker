@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form';
-import { Button, ButtonColor, Input } from '../../../components';
-import { PlayerVote } from '../../../lib/types/entityModels';
+import { Button, ButtonColor, Input } from 'src/components';
+import { PlayerVote } from 'src/lib/types/entityModels';
 import { yupValidator } from '@tanstack/yup-form-adapter';
 import * as yup from 'yup';
 
@@ -77,7 +77,6 @@ const EstimationResult: React.FC<VoteListProps> = ({
               value={field.state.value}
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
-              errors={field.state.meta.errors}
             />
           )}
         </form.Field>

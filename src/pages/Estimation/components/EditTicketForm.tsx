@@ -1,6 +1,5 @@
 import { useForm } from '@tanstack/react-form';
-import { Button, Input } from '../../../components';
-import RichEditor from '../../../components/RichEditor';
+import { Button, Input, RichEditor } from 'src/components';
 import { yupValidator } from '@tanstack/yup-form-adapter';
 import * as yup from 'yup';
 

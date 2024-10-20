@@ -1,4 +1,4 @@
-import { EntityModels } from '../types';
+import { EntityModels } from 'src/lib/types';
 import Papa from 'papaparse';
 import Showdown from 'showdown';
 
@@ -56,7 +56,7 @@ const parseJiraCSV = (
     return data.map<EntityModels.EstimationSessionTicket>((row) => ({
       id: crypto.randomUUID(),
       name: row['Summary'],
-      estimate: row['Story point estimate'] || '',
+      estimate: row['Custom field (Story point estimate)'],
       content: converter.makeHtml(row['Description'] || ''),
     }));
   } catch (error) {

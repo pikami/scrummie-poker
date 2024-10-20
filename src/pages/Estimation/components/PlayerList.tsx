@@ -1,6 +1,6 @@
 import React from 'react';
-import { EntityModels } from '../../../lib/types';
-import CopyInput from '../../../components/CopyInput';
+import { EntityModels } from 'src/lib/types';
+import { CopyInput } from 'src/components';
 
 interface PlayerListProps {
   sessionId: string;
@@ -14,7 +14,7 @@ const PlayerList: React.FC<PlayerListProps> = ({
   title = 'Players',
 }) => {
   return (
-    <div className="flex w-full max-w-sm flex-col justify-between rounded-lg bg-white p-6 shadow-lg dark:bg-nero-800">
+    <div className="flex w-full max-w-sm flex-col justify-between bg-white p-6 shadow-lg dark:bg-nero-800">
       <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-gray-100">
         {title}
       </h2>

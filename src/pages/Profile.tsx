@@ -1,6 +1,6 @@
 import { useForm } from '@tanstack/react-form';
-import { Button, Input } from '../components';
-import { useUser } from '../lib/context/user';
+import { Button, Card, Input } from 'src/components';
+import { useUser } from 'src/lib/context/user';
 import { yupValidator } from '@tanstack/yup-form-adapter';
 import * as yup from 'yup';
 
@@ -15,7 +15,7 @@ const Profile = () => {
       updateUsernameForm.reset();
     },
     validators: {
-      onChange: yup.object({
+      onSubmit: yup.object({
         name: yup.string().label('Name').max(128).required(),
       }),
     },
@@ -24,10 +24,11 @@ const Profile = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 transition-colors dark:bg-nero-900">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg dark:bg-nero-800">
-        <h1 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-gray-100">
-          Update Name
-        </h1>
+      <Card
+        title="Update Name"
+        className="w-full max-w-md bg-white shadow-lg dark:bg-nero-800"
+        transparent
+      >
         <form
           className="space-y-6"
           onSubmit={(e) => {
@@ -65,7 +66,7 @@ const Profile = () => {
             )}
           </updateUsernameForm.Subscribe>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };

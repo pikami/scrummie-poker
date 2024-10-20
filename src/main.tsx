@@ -9,16 +9,11 @@ import {
   redirect,
   RouterProvider,
 } from '@tanstack/react-router';
-import Home from './pages/Home';
-import { UserContextType, UserProvider, useUser } from './lib/context/user';
-import Login from './pages/Login';
-import { EstimationsListContextProvider } from './lib/context/estimationsList';
-import { EstimationContextProvider } from './lib/context/estimation';
-import Estimation from './pages/Estimation/Estimation';
-import Header from './components/Header';
-import Profile from './pages/Profile';
-import Join from './pages/Join';
-import { Loader } from './components';
+import { UserContextType, UserProvider, useUser } from 'src/lib/context/user';
+import { EstimationsListContextProvider } from 'src/lib/context/estimationsList';
+import { EstimationContextProvider } from 'src/lib/context/estimation';
+import { Header, Loader } from 'src/components';
+import { Estimation, Home, Join, Login, Profile } from 'src/pages';
 
 interface RouterContext {
   userContext: UserContextType;
@@ -120,7 +115,6 @@ createRoot(document.getElementById('root')!).render(
     <UserProvider>
       <EstimationsListContextProvider>
         <EstimationContextProvider>
-          {/* TODO: Move ctx providers to layout */}
           <InnerApp />
         </EstimationContextProvider>
       </EstimationsListContextProvider>

@@ -17,6 +17,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.ck .ck-editor__main {
+  color: #1a1a1a;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

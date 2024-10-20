@@ -6,7 +6,7 @@ interface GridListProps<T> {
   className?: string;
   addItemLabel?: string;
   onAddItem?: () => void;
-  itemComponent: React.ComponentType<{ item: T }>;
+  itemComponent: React.FC<{ item: T }>;
 }
 
 const AddItemButton = ({

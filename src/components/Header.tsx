@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import { useState } from 'react';
-import { useUser } from '../lib/context/user';
+import { useUser } from 'src/lib/context/user';
 
 const Header = () => {
   const { current, isLoading, logout } = useUser();

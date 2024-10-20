@@ -2,21 +2,36 @@ import { useState } from 'react';
 import {
   handleTicketFileUpload,
   TicketFileUploadResponse,
-} from '../../../lib/parsers/ticketUpload';
-import { EstimationSessionTicket } from '../../../lib/types/entityModels';
-import { Button, Card, GridList, Loader } from '../../../components';
-import HtmlEmbed from '../../../components/HtmlEmbed';
-import { useEstimationContext } from '../../../lib/context/estimation';
+} from 'src/lib/parsers/ticketUpload';
+import { EntityModels } from 'src/lib/types';
+import { Button, Card, GridList, HtmlEmbed, Loader } from 'src/components';
+import { useEstimationContext } from 'src/lib/context/estimation';
 
 interface TicketImportFormProps {
   onTicketsImported: () => void;
 }
 
+const TicketItem = ({
+  item,
+}: {
+  item: EntityModels.EstimationSessionTicket;
+}) => (
+  <Card
+    key={item.id}
+    title={item.name}
+    description={`Estimate: ${item.estimate ? item.estimate : 'N/A'}`}
+  >
+    <HtmlEmbed className="h-16 w-full" body={item.content} />
+  </Card>
+);
+
 const TicketImportForm: React.FC<TicketImportFormProps> = ({
   onTicketsImported,
 }) => {
   const [error, setError] = useState<string>('');
-  const [tickets, setTickets] = useState<EstimationSessionTicket[]>([]);
+  const [tickets, setTickets] = useState<
+    EntityModels.EstimationSessionTicket[]
+  >([]);
   const estimationContext = useEstimationContext();
 
   if (!estimationContext) {
@@ -65,15 +80,7 @@ const TicketImportForm: React.FC<TicketImportFormProps> = ({
             className="no-scrollbar overflow-y-scroll"
             items={tickets}
             colNum={1}
-            itemComponent={({ item }) => (
-              <Card
-                key={item.id}
-                title={item.name}
-                description={`Estimate: ${item.estimate || 'N/A'}`}
-              >
-                <HtmlEmbed className="h-16 w-full" body={item.content} />
-              </Card>
-            )}
+            itemComponent={TicketItem}
           />
           <Button className="mt-4" fullWidth onClick={onCreateTickets}>
             Import

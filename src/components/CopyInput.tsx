@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import Input from './Input';
+import Button from './Button';
 
 interface CopyInputProps {
   value: string;
@@ -19,19 +21,8 @@ const CopyInput: React.FC<CopyInputProps> = ({ value }) => {
 
   return (
     <div className="flex items-center space-x-2">
-      <input
-        type="text"
-        value={value}
-        readOnly
-        className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 text-gray-900 dark:border-gray-600 dark:bg-nero-800 dark:text-gray-100"
-      />
-
-      <button
-        onClick={handleCopy}
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-500"
-      >
-        {copied ? 'Copied!' : 'Copy'}
-      </button>
+      <Input type="text" value={value} readOnly />
+      <Button onClick={handleCopy}>{copied ? 'Copied!' : 'Copy'}</Button>
     </div>
   );
 };
