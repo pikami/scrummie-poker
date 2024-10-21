@@ -12,11 +12,8 @@ const Login = () => {
       email: '',
       password: '',
     },
-    onSubmit: async ({ value }) => {
-      console.log({ value });
-    },
     validators: {
-      onChange: yup.object({
+      onSubmit: yup.object({
         email: yup.string().label('Email').email().required(),
         password: yup.string().label('Password').min(8).max(256).required(),
       }),
